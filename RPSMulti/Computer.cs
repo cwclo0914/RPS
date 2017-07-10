@@ -9,7 +9,6 @@ namespace RPS
     class Computer : Player
     {
         //Fields
-        private Random random = new Random();
 
         //Constructor
         public Computer()
@@ -17,11 +16,9 @@ namespace RPS
         }
 
         //Methods
-        public void Shuffle()
+        public void Shuffle(Random rand)
         {
-            int i = random.Next(0, 3);
-            Choice = i;
+            Choice = rand.Next(0, 3);
         }
-        
     }
 }

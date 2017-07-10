@@ -10,12 +10,13 @@ namespace RPS
     {
         static void Main(string[] args)
         {
-            //人数定義
-            Player p1 = new Player();
-            Computer c1 = new Computer();
             bool first = true;
             string redoflg = "";
             int judge = 0;
+
+            //人数定義
+            Player p1 = new Player();
+            Computer c1 = new Computer();
 
             do //"N"を入力するまで続く
             {

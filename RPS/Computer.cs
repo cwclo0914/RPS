@@ -19,9 +19,8 @@ namespace RPS
         //Methods
         public void Shuffle()
         {
-            int i = random.Next(0, 3);
-            Choice = i;
+            Choice = random.Next() % 3;
         }
-        
+
     }
 }

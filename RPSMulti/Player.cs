@@ -10,7 +10,6 @@ namespace RPS
     {
         //Fields
         private int choice; //0:グー、1:チョキ、2:パー
-        private int score;
 
         //Constructor
         public Player()
