@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace RPS
 {
-    class Computer : Player
+    internal class Computer : Player
     {
-        //Fields
+        // Fields
         private Random random = new Random();
 
-        //Constructor
+        // Constructor
         public Computer()
         {
         }
 
-        //Methods
+        // Methods
         public void Shuffle()
         {
-            Choice = random.Next() % 3;
+            this.Choice = this.random.Next() % 3;
         }
 
     }

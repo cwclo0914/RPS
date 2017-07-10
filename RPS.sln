@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPS", "RPS\RPS.csproj", "{B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPSMulti", "RPSMulti\RPSMulti.csproj", "{FAF5FC20-FC31-4F9C-B105-8CA870732F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleCop.Analyzers", "..\..\C#\StyleCopAnalyzers-master\StyleCop.Analyzers\StyleCop.Analyzers\StyleCop.Analyzers.csproj", "{3B052737-06CE-4182-AE0F-08EB82DFA73E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleCop.Analyzers", "..\..\..\C#\StyleCopAnalyzers-master\StyleCop.Analyzers\StyleCop.Analyzers\StyleCop.Analyzers.csproj", "{3B052737-06CE-4182-AE0F-08EB82DFA73E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,41 +6,46 @@ using System.Threading.Tasks;
 
 namespace RPS
 {
-    class Player
+    internal class Player
     {
-        //Fields
-        private int choice; //0:グー、1:チョキ、2:パー
+        // Fields
+        private int choice; // 0:グー、1:チョキ、2:パー
         private int score;
 
-        //Constructor
+        // Constructor
         public Player()
         {
-            Choice = -1;
-            Score = 0;
+            this.Choice = -1;
+            this.Score = 0;
         }
 
-        //Properties
-        public int Choice //0:グー、1:チョキ、2:パー
+        // Properties
+        public int Choice // 0:グー、1:チョキ、2:パー
         {
-            get { return choice; }
-            set {
-                if(value >= 0 && value <= 2)
+            get
+            {
+                return this.choice;
+            }
+
+            set
+            {
+                if (value >= 0 && value <= 2)
                 {
-                    choice = value;
+                    this.choice = value;
                 }
                 else
                 {
-                    choice = -1;
+                    this.choice = -1;
                 }
             }
         }
 
-        public int Score { get; set; } //後期フェーズ用
-        
-        //Methods
+        public int Score { get; set; } // 後期フェーズ用
+
+        // Methods
         public void Reset()
         {
-            Choice = -1;
+            this.Choice = -1;
         }
     }
 }
