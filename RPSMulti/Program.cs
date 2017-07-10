@@ -105,7 +105,7 @@ namespace RPSMulti
                 // 前回のデータを消す
                 for (int i = 0; i < output.Length; i++)
                 {
-                    output[i] = string.Empty;
+                    output[i] = "0";
                 }
 
                 // Player
@@ -356,43 +356,22 @@ namespace RPSMulti
 
             } while (redoflg == "Y" || redoflg == "y"); // "N"を入力するまで続く
 
-            // （暫定処置）続きからであれば点数を足していく
+            // 続きからであれば点数を足していく
             int[] finalscore = new int[(maxplayer * 2) + 1];
 
-            if (continueflg == "Y" || continueflg == "y")
+            for (int i = 0; i < finalscore.Length; i++)
             {
-                for (int i = 0; i < finalscore.Length; i++)
+                if (i < pnum)
                 {
-                    if (i < pnum)
-                    {
-                        finalscore[i] = Convert.ToInt32(output[i]) + p[i].Score;
-                    }
-                    else if (i >= maxplayer && i < maxplayer + cnum)
-                    {
-                        finalscore[i] = Convert.ToInt32(output[i]) + c[i - maxplayer].Score;
-                    }
-                    else if (i == maxplayer * 2)
-                    {
-                        finalscore[i] = Convert.ToInt32(output[i]) + roundcount;
-                    }
+                    finalscore[i] = Convert.ToInt32(output[i]) + p[i].Score;
                 }
-            }
-            else
-            {
-                for (int i = 0; i < finalscore.Length; i++)
+                else if (i >= maxplayer && i < maxplayer + cnum)
                 {
-                    if (i < pnum)
-                    {
-                        finalscore[i] = p[i].Score;
-                    }
-                    else if (i >= maxplayer && i < maxplayer + cnum)
-                    {
-                        finalscore[i] = c[i - maxplayer].Score;
-                    }
-                    else if (i == maxplayer * 2)
-                    {
-                        finalscore[i] = roundcount;
-                    }
+                    finalscore[i] = Convert.ToInt32(output[i]) + c[i - maxplayer].Score;
+                }
+                else if (i == maxplayer * 2)
+                {
+                    finalscore[i] = Convert.ToInt32(output[i]) + roundcount;
                 }
             }
 
