@@ -13,7 +13,7 @@ namespace RPS
             //人数定義
             Player p1 = new Player();
             Computer c1 = new Computer();
-            int count = 0;
+            bool first = true;
             string redoflg = "";
             int judge = 0;
 
@@ -29,7 +29,7 @@ namespace RPS
                     {
                         try
                         {
-                            if (count == 0)
+                            if (first == true)
                             {
                                 Console.Write("じゃんけんへようこそ。\n入力してください。");
                             }
@@ -45,7 +45,7 @@ namespace RPS
                         {
                             Console.WriteLine(ex.Message);
                         }
-                        count++;
+                        first = false;
                     } while (!(p1.Choice >= 0 && p1.Choice <= 2)); //正しく入力するまで続く
 
                     //コンピューターの出力
@@ -61,7 +61,7 @@ namespace RPS
                     //あいこ判定
                     if (p1.Choice == c1.Choice)
                     {
-                        Console.WriteLine("あいこです。もう一度勝負します。");
+                        Console.WriteLine("あいこです。もう一度勝負します。\n");
                     }
 
                 } while (p1.Choice == c1.Choice); //勝負が決まるまで続く
@@ -71,7 +71,8 @@ namespace RPS
                 //勝ち「2」、負け「1」
                 if (judge == 2)
                 {
-                    Console.WriteLine("あなたの勝ちです。おめでとうございます。");
+                    Console.WriteLine("あなたの勝ちです。おめでとうございます。\n");
+                    p1.Score++;
                     do
                     {
                         Console.Write("もう一度勝負しますか？（Y/N）＞");
@@ -80,7 +81,8 @@ namespace RPS
                 }
                 else if (judge == 1)
                 {
-                    Console.WriteLine("コンピューターの勝ちです。残念です。");
+                    Console.WriteLine("コンピューターの勝ちです。残念です。\n");
+                    c1.Score++;
                     do
                     {
                         Console.Write("もう一度勝負しますか？（Y/N）＞");
@@ -88,6 +90,14 @@ namespace RPS
                     } while (!(redoflg == "Y" || redoflg == "y" || redoflg == "N" || redoflg == "n"));
                 }
             } while (redoflg == "Y" || redoflg == "y"); //"N"を入力するまで続く
+
+            Console.WriteLine("あなた: {0}　コンピューター: {1}", p1.Score, c1.Score);
+            if (p1.Score == c1.Score)
+                Console.WriteLine("あいこです。");
+            else if (p1.Score > c1.Score)
+                Console.WriteLine("あなたの勝ちです。");
+            else if (p1.Score < c1.Score)
+                Console.WriteLine("コンピューターの勝ちです。");
 
             Console.WriteLine("終了します。お疲れ様でした。");
             Console.Read();
