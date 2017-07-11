@@ -11,7 +11,7 @@ namespace RPSMulti
     {
         private static void Main(string[] args)
         {
-            // Commons
+            // Common
             string continueflg = string.Empty;
             string redoflg = string.Empty;
             int roundcount = 0;
