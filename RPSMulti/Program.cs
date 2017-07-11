@@ -182,8 +182,8 @@ namespace RPSMulti
                         choicecount[i] = 0;
 
                     // 結果の出力
-                    AnnounceCount("プレイヤー", pnum, p, ref choicecount);
-                    AnnounceCount("コンピューター", cnum, c, ref choicecount);
+                    AnnouncementAndCount("プレイヤー", pnum, p, ref choicecount);
+                    AnnouncementAndCount("コンピューター", cnum, c, ref choicecount);
 
                     Console.WriteLine();
 
@@ -211,7 +211,7 @@ namespace RPSMulti
                         {
                             Judgement("プレイヤー", pnum, j + 1, ref p);
                             Judgement("コンピューター", cnum, j + 1, ref c);
-                            
+
                             Console.WriteLine("の勝ちです。\n");
                         }
                     }
@@ -310,7 +310,8 @@ namespace RPSMulti
             List<string> empty = new List<string> { initialise + Environment.NewLine };
             ContentsFileIO.Write(empty);
         }
-
+        
+        // 人数確認
         private static void NumberConfirmation(string name, int max, ref int num)
         {
             Console.WriteLine("{0}は何人ですか？", name);
@@ -330,9 +331,9 @@ namespace RPSMulti
 
             Console.WriteLine();
         }
-
+        
         // 0:グー、1:チョキ、2:パー
-        private static void AnnounceCount(string name, int max, Player[] entity, ref int[] choicecount)
+        private static void AnnouncementAndCount(string name, int max, Player[] entity, ref int[] choicecount)
         {
             for (int i = 0; i < max; i++)
             {
@@ -353,7 +354,7 @@ namespace RPSMulti
                 }
             }
         }
-
+        
         // スコア増加の判定（Scoreがプロパティであるためreturnによって回避）
         private static void Judgement(string name, int max, int winningchoice, ref Player[] entity)
         {
