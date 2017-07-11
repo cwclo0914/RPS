@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPS", "RPS\RPS.csproj", "{B4F67149-89A9-4B01-AF58-4435596BE47B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPSMulti", "RPSMulti\RPSMulti.csproj", "{FAF5FC20-FC31-4F9C-B105-8CA870732F99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StyleCop.Analyzers", "..\..\..\C#\StyleCopAnalyzers-master\StyleCop.Analyzers\StyleCop.Analyzers\StyleCop.Analyzers.csproj", "{3B052737-06CE-4182-AE0F-08EB82DFA73E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B4F67149-89A9-4B01-AF58-4435596BE47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4F67149-89A9-4B01-AF58-4435596BE47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4F67149-89A9-4B01-AF58-4435596BE47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4F67149-89A9-4B01-AF58-4435596BE47B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAF5FC20-FC31-4F9C-B105-8CA870732F99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAF5FC20-FC31-4F9C-B105-8CA870732F99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAF5FC20-FC31-4F9C-B105-8CA870732F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAF5FC20-FC31-4F9C-B105-8CA870732F99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B052737-06CE-4182-AE0F-08EB82DFA73E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B052737-06CE-4182-AE0F-08EB82DFA73E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B052737-06CE-4182-AE0F-08EB82DFA73E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B052737-06CE-4182-AE0F-08EB82DFA73E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
