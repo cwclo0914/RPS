@@ -56,7 +56,7 @@ namespace RPSMulti
                     {
                         if (r[i] != string.Empty)
                         {
-                            Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i, r[i], r[r.Length - 1], (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
+                            Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
                         }
                         else
                         {
@@ -69,7 +69,7 @@ namespace RPSMulti
                     {
                         if (r[i] != string.Empty)
                         {
-                            Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - maxplayer + 1, r[i], r[r.Length - 1], (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
+                            Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - maxplayer + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
                         }
                         else
                         {
@@ -392,12 +392,12 @@ namespace RPSMulti
 
             for (int i = 0; i < pnum; i++)
             {
-                Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100);
+                Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
             }
 
             for (int i = 0; i < cnum; i++)
             {
-                Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + maxplayer], finalscore[finalscore.Length - 1], Convert.ToDouble(finalscore[i + maxplayer]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100);
+                Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + maxplayer], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i + maxplayer]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
             }
 
             // 書き込み準備
