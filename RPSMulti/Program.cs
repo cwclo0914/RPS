@@ -23,8 +23,8 @@ namespace RPSMulti
             int pnum = 0;
             int cnum = 0;
 
-            List<string> rates = new List<string>(); // 入力用
-            string[] output = new string[pmax + cmax + 1]; // 出力用
+            List<string> rates = new List<string>(); // IO用
+            string[] output = new string[pmax + cmax + 1]; // 出力用ブッファ
 
             Random random = new Random();
 
@@ -197,6 +197,7 @@ namespace RPSMulti
 
                     if (zerocount == 0 || zerocount == choicecount.Length - 1) // choicecount.Length - 1 = 2(パー)
                         Console.WriteLine("あいこです。もう一度勝負します。\n");
+
                 } while (zerocount == 0 || zerocount == choicecount.Length - 1); // 勝負が決まるまで続く（全種類出しても一種類だけ出してもあいこ）
 
 
