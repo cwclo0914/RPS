@@ -15,7 +15,7 @@ namespace RPSMulti
             string continueflg = string.Empty;
             string redoflg = string.Empty;
             int roundcount = 0;
-            int[] choicecount = new int[3];
+            int[] choicecount = new int[3] { 0, 0, 0 };
             int zerocount = 0;
             const int pmax = 3;
             const int cmax = 5;
@@ -97,8 +97,7 @@ namespace RPSMulti
             }
 
             // 人数定義
-            // 続きから
-            if (continueflg == "Y" || continueflg == "y")
+            if (continueflg == "Y" || continueflg == "y") // 続きから
             {
                 if (rates[0].IndexOf(',') != -1)
                 {
@@ -196,17 +195,16 @@ namespace RPSMulti
                             zerocount++;
                     }
 
-                    if (zerocount == 0 || zerocount == choicecount.Length - 1)
+                    if (zerocount == 0 || zerocount == choicecount.Length - 1) // choicecount.Length - 1 = 2(パー)
                         Console.WriteLine("あいこです。もう一度勝負します。\n");
                 } while (zerocount == 0 || zerocount == choicecount.Length - 1); // 勝負が決まるまで続く（全種類出しても一種類だけ出してもあいこ）
 
-                // パーが存在する → グーvsチョキでない
-                if (choicecount[choicecount.Length - 1] != 0) // choicecount.Length - 1 = 2(パー)
+
+                if (choicecount[choicecount.Length - 1] != 0) // パーが存在する → グーvsチョキでない
                 {
-                    for (int j = 0; j < choicecount.Length - 1; j++)
+                    for (int j = 0; j < choicecount.Length - 1; j++) // j = 0: チョキvsパー、j = 1: グーvsパー
                     {
-                        // j = 0: チョキvsパー、j = 1: グーvsパー
-                        // (0)グーなしであれば(1)チョキが勝つ、(1)チョキなしであれば(2)パーが勝つ
+                        // (0)グーなしであれば+1の(1)チョキが勝つ、(1)チョキなしであれば+1の(2)パーが勝つ
                         if (choicecount[j] == 0)
                         {
                             Judgement("プレイヤー", pnum, j + 1, ref p);
@@ -216,7 +214,7 @@ namespace RPSMulti
                         }
                     }
                 }
-                else // グーvsチョキ（両端のケース）
+                else // グーvsチョキ（両端のケース）、(0)グーが勝つ
                 {
                     Judgement("プレイヤー", pnum, 0, ref p);
                     Judgement("コンピューター", cnum, 0, ref c);
