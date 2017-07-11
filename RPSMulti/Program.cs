@@ -77,10 +77,10 @@ namespace RPSMulti
                             if (r[i] != string.Empty)
                                 // Player
                                 if (i < pmax)
-                                    Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
+                                    Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100, 1));
                                 // CPU
                                 else
-                                    Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - pmax + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
+                                    Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - pmax + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100, 1));
                         }
 
                         Console.WriteLine();
@@ -252,10 +252,10 @@ namespace RPSMulti
             Console.WriteLine("総ラウンド数：{0}", finalscore[finalscore.Length - 1]);
 
             for (int i = 0; i < pnum; i++)
-                Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
+                Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100, 1));
 
             for (int i = 0; i < cnum; i++)
-                Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + pmax], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i + pmax]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
+                Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + pmax], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i + pmax]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100, 1));
 
             // 書き込み準備
             for (int i = 0; i < output.Length; i++)
@@ -310,7 +310,7 @@ namespace RPSMulti
             List<string> empty = new List<string> { initialise + Environment.NewLine };
             ContentsFileIO.Write(empty);
         }
-        
+
         // 人数確認
         private static void NumberConfirmation(string name, int max, ref int num)
         {
@@ -331,7 +331,7 @@ namespace RPSMulti
 
             Console.WriteLine();
         }
-        
+
         // 0:グー、1:チョキ、2:パー
         private static void AnnouncementAndCount(string name, int max, Player[] entity, ref int[] choicecount)
         {
@@ -354,7 +354,7 @@ namespace RPSMulti
                 }
             }
         }
-        
+
         // スコア増加の判定（Scoreがプロパティであるためreturnによって回避）
         private static void Judgement(string name, int max, int winningchoice, ref Player[] entity)
         {
