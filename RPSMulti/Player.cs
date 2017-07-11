@@ -46,5 +46,9 @@ namespace RPSMulti
         {
             this.Choice = -1;
         }
+        public virtual void Shuffle(Random rand)
+        {
+            this.Choice = rand.Next();
+        }
     }
 }

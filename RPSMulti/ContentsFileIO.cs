@@ -66,5 +66,12 @@ namespace RPSMulti
                 Console.WriteLine("書込エラー");
             }
         }
+
+        // バックアップを取る
+        public static void BackUp()
+        {
+            string dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            System.IO.File.Move(@"Data\rates.csv", @"Data\rates_" + dt + ".csv");
+        }
     }
 }

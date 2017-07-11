@@ -32,15 +32,8 @@ namespace RPSMulti
             if (File.Exists(@"Data\rates.csv") == false)
             {
                 Console.WriteLine("新しいセーブデータを作成します。");
-                string initialise = string.Empty;
-                for (int i = 0; i < pmax + cmax; i++)
-                {
-                    initialise += ",";
-                }
 
-                List<string> empty = new List<string> { initialise + Environment.NewLine };
-                ContentsFileIO.Write(empty);
-                continueflg = "N";
+                SaveInitialise(pmax + cmax);
 
                 Console.WriteLine();
             }
@@ -56,17 +49,9 @@ namespace RPSMulti
                     if (r.Length != pmax + cmax + 1)
                     {
                         Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。");
-                        string initialise = string.Empty;
-                        for (int i = 0; i < pmax + cmax; i++)
-                        {
-                            initialise += ",";
-                        }
+                        ContentsFileIO.BackUp();
 
-                        string dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-
-                        System.IO.File.Move(@"Data\rates.csv", @"Data\rates_" + dt + ".csv"); // バックアップを取る
-                        List<string> empty = new List<string> { initialise + Environment.NewLine };
-                        ContentsFileIO.Write(empty);
+                        SaveInitialise(pmax + cmax);
 
                         rates = ContentsFileIO.Read();
                         r = rates[0].Split(',');
@@ -78,9 +63,7 @@ namespace RPSMulti
 
                     // 空白セーブ（Rounds = 0）を読み込んだ場合
                     if (r[r.Length - 1] == string.Empty)
-                    {
                         continueflg = "N";
-                    }
                     else
                     {
                         // 画面の表示
@@ -91,23 +74,13 @@ namespace RPSMulti
 
                         for (int i = 0; i < pmax + cmax; i++)
                         {
-                            // Player
-                            if (i < pmax)
-                            {
-                                if (r[i] != string.Empty)
-                                {
+                            if (r[i] != string.Empty)
+                                // Player
+                                if (i < pmax)
                                     Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
-                                }
-                            }
-
-                            // CPU
-                            else
-                            {
-                                if (r[i] != string.Empty)
-                                {
+                                // CPU
+                                else
                                     Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - pmax + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100));
-                                }
-                            }
                         }
 
                         Console.WriteLine();
@@ -135,13 +108,9 @@ namespace RPSMulti
                         if (r[i] != string.Empty)
                         {
                             if (i < pmax)
-                            {
                                 pnum++;
-                            }
                             else
-                            {
                                 cnum++;
-                            }
                         }
                     }
                 }
@@ -150,55 +119,22 @@ namespace RPSMulti
             {
                 // 前回のデータを消す
                 for (int i = 0; i < output.Length; i++)
-                {
                     output[i] = "0";
-                }
 
-                // Player
-                Console.WriteLine("プレイヤーは何人ですか？");
-                do
-                {
-                    try
-                    {
-                        Console.Write("1～{0}の数字を入力してください。＞", pmax);
-                        pnum = int.Parse(Console.ReadLine());
-                    }
-                    catch (Exception)
-                    {
-                        Console.Write("入力が正しくありません。");
-                    }
-                } while (pnum < 1 || pnum > pmax);
-
-                Console.WriteLine();
-
-                // CPU
-                Console.WriteLine("コンピューターは何人ですか？");
-                do
-                {
-                    try
-                    {
-                        Console.Write("1～{0}の数字を入力してください。＞", cmax);
-                        cnum = int.Parse(Console.ReadLine());
-                    }
-                    catch (Exception)
-                    {
-                        Console.Write("入力が正しくありません。");
-                    }
-                } while (cnum < 1 || cnum > cmax);
+                // 人数確認
+                NumberConfirmation("プレイヤー", pmax, ref pnum); // Player
+                NumberConfirmation("コンピューター", cmax, ref cnum); // CPU
             }
 
             // インスタンス生成
             Player[] p = new Player[pnum];
-            Computer[] c = new Computer[cnum];
+            Player[] c = new Computer[cnum];
+
             for (int i = 0; i < pnum; i++)
-            {
                 p[i] = new Player();
-            }
 
             for (int i = 0; i < cnum; i++)
-            {
                 c[i] = new Computer();
-            }
 
             Console.WriteLine("\n　★　☆　★　じゃんけんへようこそ　★　☆　★　\n");
 
@@ -210,14 +146,10 @@ namespace RPSMulti
                 {
                     // 初期値に戻す
                     for (int i = 0; i < pnum; i++)
-                    {
                         p[i].Reset();
-                    }
 
                     for (int i = 0; i < cnum; i++)
-                    {
                         c[i].Reset();
-                    }
 
                     for (int i = 0; i < pnum; i++)
                     {
@@ -238,86 +170,22 @@ namespace RPSMulti
 
                     Console.WriteLine();
 
-                    for (int i = 0; i < pnum; i++)
-                    {
-                        // 0:グー、1:チョキ、2:パー
-                        switch (p[i].Choice)
-                        {
-                            case 0:
-                                Console.WriteLine("プレイヤー{0}がグーを出しました。", i + 1);
-                                break;
-                            case 1:
-                                Console.WriteLine("プレイヤー{0}がチョキを出しました。", i + 1);
-                                break;
-                            case 2:
-                                Console.WriteLine("プレイヤー{0}がパーを出しました。", i + 1);
-                                break;
-                        }
-                    }
-
-                    // コンピューターの出力
+                    // コンピューターのシャッフル
                     for (int i = 0; i < cnum; i++)
                     {
                         c[i].Shuffle(random);
-
-                        // 0:グー、1:チョキ、2:パー
-                        switch (c[i].Choice)
-                        {
-                            case 0:
-                                Console.WriteLine("コンピューター{0}がグーを出しました。", i + 1);
-                                break;
-                            case 1:
-                                Console.WriteLine("コンピューター{0}がチョキを出しました。", i + 1);
-                                break;
-                            case 2:
-                                Console.WriteLine("コンピューター{0}がパーを出しました。", i + 1);
-                                break;
-                        }
-
                         System.Threading.Thread.Sleep(15);
                     }
 
-                    Console.WriteLine();
-
-                    // グーチョキパーを数える
+                    // グーチョキパーを数える準備
                     for (int i = 0; i < choicecount.Length; i++)
-                    {
                         choicecount[i] = 0;
-                    }
 
-                    // Player
-                    for (int i = 0; i < pnum; i++)
-                    {
-                        switch (p[i].Choice)
-                        {
-                            case 0:
-                                choicecount[0]++;
-                                break;
-                            case 1:
-                                choicecount[1]++;
-                                break;
-                            case 2:
-                                choicecount[2]++;
-                                break;
-                        }
-                    }
+                    // 結果の出力
+                    AnnounceCount("プレイヤー", pnum, p, ref choicecount);
+                    AnnounceCount("コンピューター", cnum, c, ref choicecount);
 
-                    // CPU
-                    for (int i = 0; i < cnum; i++)
-                    {
-                        switch (c[i].Choice)
-                        {
-                            case 0:
-                                choicecount[0]++;
-                                break;
-                            case 1:
-                                choicecount[1]++;
-                                break;
-                            case 2:
-                                choicecount[2]++;
-                                break;
-                        }
-                    }
+                    Console.WriteLine();
 
                     // あいこ判定
                     zerocount = 0;
@@ -325,67 +193,33 @@ namespace RPSMulti
                     for (int i = 0; i < choicecount.Length; i++)
                     {
                         if (choicecount[i] == 0)
-                        {
                             zerocount++;
-                        }
                     }
 
                     if (zerocount == 0 || zerocount == choicecount.Length - 1)
-                    {
                         Console.WriteLine("あいこです。もう一度勝負します。\n");
-                    }
                 } while (zerocount == 0 || zerocount == choicecount.Length - 1); // 勝負が決まるまで続く（全種類出しても一種類だけ出してもあいこ）
 
-                // パーが0でない→グーvsチョキでない
-                if (choicecount[choicecount.Length - 1] != 0)
+                // パーが存在する → グーvsチョキでない
+                if (choicecount[choicecount.Length - 1] != 0) // choicecount.Length - 1 = 2(パー)
                 {
-                    for (int j = 0; j < choicecount.Length; j++)
+                    for (int j = 0; j < choicecount.Length - 1; j++)
                     {
                         // j = 0: チョキvsパー、j = 1: グーvsパー
+                        // (0)グーなしであれば(1)チョキが勝つ、(1)チョキなしであれば(2)パーが勝つ
                         if (choicecount[j] == 0)
                         {
-                            for (int i = 0; i < pnum; i++)
-                            {
-                                if (p[i].Choice == j + 1)
-                                {
-                                    // (0)グーなしであれば(1)チョキが勝つ、(1)チョキなしであれば(2)パーが勝つ
-                                    Console.Write("プレイヤー{0}、", i + 1);
-                                    p[i].Score++;
-                                }
-                            }
-
-                            for (int i = 0; i < cnum; i++)
-                            {
-                                if (c[i].Choice == j + 1)
-                                {
-                                    Console.Write("コンピューター{0}、", i + 1);
-                                    c[i].Score++;
-                                }
-                            }
-
+                            Judgement("プレイヤー", pnum, j + 1, ref p);
+                            Judgement("コンピューター", cnum, j + 1, ref c);
+                            
                             Console.WriteLine("の勝ちです。\n");
                         }
                     }
                 }
                 else // グーvsチョキ（両端のケース）
                 {
-                    for (int i = 0; i < pnum; i++)
-                    {
-                        if (p[i].Choice == 0)
-                        {
-                            Console.Write("プレイヤー{0}、", i + 1);
-                            p[i].Score++;
-                        }
-                    }
-
-                    for (int i = 0; i < cnum; i++)
-                    {
-                        if (c[i].Choice == 0)
-                        {
-                            Console.Write("コンピューター{0}、", i + 1);
-                            c[i].Score++;
-                        }
-                    }
+                    Judgement("プレイヤー", pnum, 0, ref p);
+                    Judgement("コンピューター", cnum, 0, ref c);
 
                     Console.WriteLine("の勝ちです。\n");
                 }
@@ -407,31 +241,21 @@ namespace RPSMulti
             for (int i = 0; i < finalscore.Length; i++)
             {
                 if (i < pnum)
-                {
                     finalscore[i] = Convert.ToInt32(output[i]) + p[i].Score;
-                }
                 else if (i >= pmax && i < pmax + cnum)
-                {
                     finalscore[i] = Convert.ToInt32(output[i]) + c[i - pmax].Score;
-                }
                 else if (i == finalscore.Length - 1)
-                {
                     finalscore[i] = Convert.ToInt32(output[i]) + roundcount;
-                }
             }
 
             // 結果報告
             Console.WriteLine("総ラウンド数：{0}", finalscore[finalscore.Length - 1]);
 
             for (int i = 0; i < pnum; i++)
-            {
                 Console.WriteLine("プレイヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
-            }
 
             for (int i = 0; i < cnum; i++)
-            {
                 Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + pmax], finalscore[finalscore.Length - 1], Math.Round(Convert.ToDouble(finalscore[i + pmax]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100));
-            }
 
             // 書き込み準備
             for (int i = 0; i < output.Length; i++)
@@ -440,31 +264,21 @@ namespace RPSMulti
                 if (i < pmax)
                 {
                     if (i < pnum)
-                    {
                         output[i] = finalscore[i].ToString();
-                    }
                     else
-                    {
                         output[i] = string.Empty;
-                    }
                 }
                 // CPU
                 else if (i < pmax + cmax)
                 {
                     if (i - pmax < cnum)
-                    {
                         output[i] = finalscore[i].ToString();
-                    }
                     else
-                    {
                         output[i] = string.Empty;
-                    }
                 }
                 // 総ラウンド数
                 else
-                {
                     output[i] = finalscore[i].ToString();
-                }
             }
 
             // 総ラウンド数(+1)を含めるStringの生成
@@ -473,13 +287,9 @@ namespace RPSMulti
             for (int i = 0; i < (pmax + cmax) + 1; i++)
             {
                 if (i == 0)
-                {
                     s = output[i];
-                }
                 else
-                {
                     s += ',' + output[i];
-                }
             }
 
             rates.Clear();
@@ -488,6 +298,73 @@ namespace RPSMulti
 
             Console.WriteLine("終了します。お疲れ様でした。");
             Console.Read();
+        }
+
+        // セーブデータ初期化
+        private static void SaveInitialise(int max)
+        {
+            string initialise = string.Empty;
+            for (int i = 0; i < max; i++)
+                initialise += ",";
+
+            List<string> empty = new List<string> { initialise + Environment.NewLine };
+            ContentsFileIO.Write(empty);
+        }
+
+        private static void NumberConfirmation(string name, int max, ref int num)
+        {
+            Console.WriteLine("{0}は何人ですか？", name);
+
+            do
+            {
+                try
+                {
+                    Console.Write("1～{0}の数字を入力してください。＞", max);
+                    num = int.Parse(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.Write("入力が正しくありません。");
+                }
+            } while (num < 1 || num > max);
+
+            Console.WriteLine();
+        }
+
+        // 0:グー、1:チョキ、2:パー
+        private static void AnnounceCount(string name, int max, Player[] entity, ref int[] choicecount)
+        {
+            for (int i = 0; i < max; i++)
+            {
+                switch (entity[i].Choice)
+                {
+                    case 0:
+                        Console.WriteLine("{0}{1}がグーを出しました。", name, i + 1);
+                        choicecount[0]++;
+                        break;
+                    case 1:
+                        Console.WriteLine("{0}{1}がチョキを出しました。", name, i + 1);
+                        choicecount[1]++;
+                        break;
+                    case 2:
+                        Console.WriteLine("{0}{1}がパーを出しました。", name, i + 1);
+                        choicecount[2]++;
+                        break;
+                }
+            }
+        }
+
+        // スコア増加の判定（Scoreがプロパティであるためreturnによって回避）
+        private static void Judgement(string name, int max, int winningchoice, ref Player[] entity)
+        {
+            for (int i = 0; i < max; i++)
+            {
+                if (entity[i].Choice == winningchoice)
+                {
+                    Console.Write("{0}{1}、", name, i + 1);
+                    entity[i].Score++;
+                }
+            }
         }
     }
 }

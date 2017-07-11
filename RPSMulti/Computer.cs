@@ -16,7 +16,7 @@ namespace RPSMulti
         }
 
         // Methods
-        public void Shuffle(Random rand)
+        public override void Shuffle(Random rand)
         {
             this.Choice = rand.Next(0, 3);
         }
