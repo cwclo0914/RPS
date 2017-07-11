@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace RPSMulti
 {
@@ -21,48 +22,59 @@ namespace RPSMulti
             int cnum = 0;
 
             string[] output = new string[(maxplayer * 2) + 1];
+            List<string> rates = new List<string>();
 
             // 前回勝率の読込
-            List<string> rates = ContentsFileIO.Read();
-
-            if (rates[0].IndexOf(',') != -1)
+            if (File.Exists(@"Data\rates.csv") == false)
             {
-                string[] r = rates[0].Split(',');
-                Array.Copy(r, output, r.Length); // 書き込みに使用するコピーを作成する
+                Console.WriteLine("新しいファイルを作成します。");
+                List<string> empty = new List<string> { ",", ",", ",", ",", ",", ",", Environment.NewLine };
+                ContentsFileIO.Write(empty);
+                continueflg = "N";
+            }
+            else
+            {
+                rates = ContentsFileIO.Read();
 
-                // 書き込む
-                Console.WriteLine("前回結果：");
-
-                // 総ラウンド数
-                Console.WriteLine("総ラウンド数：{0}", r[r.Length - 1]);
-                if (r[r.Length - 1] == string.Empty)
+                if (rates[0].IndexOf(',') != -1)
                 {
-                    continueflg = "N";
-                }
+                    string[] r = rates[0].Split(',');
+                    Array.Copy(r, output, r.Length); // 書き込みに使用するコピーを作成する
 
-                // Player
-                for (int i = 0; i < maxplayer; i++)
-                {
-                    if (r[i] != string.Empty)
-                    {
-                        Console.WriteLine("プレーヤー{0}：{1}", i, (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
-                    }
-                    else
-                    {
-                        Console.WriteLine("プレーヤー{0}：参加せず", i);
-                    }
-                }
+                    // 書き込む
+                    Console.WriteLine("前回結果：");
 
-                // CPU
-                for (int i = maxplayer; i < maxplayer * 2; i++)
-                {
-                    if (r[i] != string.Empty)
+                    // 総ラウンド数
+                    Console.WriteLine("総ラウンド数：{0}", r[r.Length - 1]);
+                    if (r[r.Length - 1] == string.Empty)
                     {
-                        Console.WriteLine("コンピューター{0}：{1}", i - maxplayer + 1, (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
+                        continueflg = "N";
                     }
-                    else
+
+                    // Player
+                    for (int i = 0; i < maxplayer; i++)
                     {
-                        Console.WriteLine("コンピューター{0}：参加せず", i - maxplayer + 1);
+                        if (r[i] != string.Empty)
+                        {
+                            Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i, r[i], r[r.Length - 1], (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
+                        }
+                        else
+                        {
+                            Console.WriteLine("プレーヤー{0}：参加せず", i);
+                        }
+                    }
+
+                    // CPU
+                    for (int i = maxplayer; i < maxplayer * 2; i++)
+                    {
+                        if (r[i] != string.Empty)
+                        {
+                            Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - maxplayer + 1, r[i], r[r.Length - 1], (Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1])) * 100);
+                        }
+                        else
+                        {
+                            Console.WriteLine("コンピューター{0}：参加せず", i - maxplayer + 1);
+                        }
                     }
                 }
             }
@@ -380,12 +392,12 @@ namespace RPSMulti
 
             for (int i = 0; i < pnum; i++)
             {
-                Console.Write("プレーヤー{0}：{1}\n", i + 1, finalscore[i]);
+                Console.WriteLine("プレーヤー{0}：{1}/{2} ({3}%)", i + 1, finalscore[i], finalscore[finalscore.Length - 1], Convert.ToDouble(finalscore[i]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100);
             }
 
             for (int i = 0; i < cnum; i++)
             {
-                Console.Write("コンピューター{0}：{1}\n", i + 1, finalscore[i + maxplayer]);
+                Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i + 1, finalscore[i + maxplayer], finalscore[finalscore.Length - 1], Convert.ToDouble(finalscore[i + maxplayer]) / Convert.ToDouble(finalscore[finalscore.Length - 1]) * 100);
             }
 
             // 書き込み準備
