@@ -86,7 +86,7 @@ namespace RPSMulti
             while (!(continueflg == "Y" || continueflg == "y" || continueflg == "N" || continueflg == "n"))
             {
                 Console.WriteLine("続きから始めますか？");
-                Console.Write("Y/Nを入力してください。");
+                Console.Write("Y/Nを入力してください。＞");
                 continueflg = Console.ReadLine();
             }
 
@@ -104,6 +104,7 @@ namespace RPSMulti
                             pnum++;
                         }
                     }
+
                     for (int i = maxplayer; i < maxplayer * 2; i++)
                     {
                         if (r[i] != string.Empty)
@@ -113,8 +114,7 @@ namespace RPSMulti
                     }
                 }
             }
-            // 初めから
-            else
+            else // 初めから
             {
                 // 前回のデータを消す
                 for (int i = 0; i < output.Length; i++)
@@ -131,9 +131,9 @@ namespace RPSMulti
                         Console.Write("1～{0}の数字を入力してください。＞", maxplayer);
                         pnum = int.Parse(Console.ReadLine());
                     }
-                    catch (FormatException ex)
+                    catch (Exception)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("入力が正しくありません。");
                     }
                 } while (pnum < 1 || pnum > maxplayer);
 
@@ -146,9 +146,9 @@ namespace RPSMulti
                         Console.Write("1～{0}の数字を入力してください。＞", maxplayer);
                         cnum = int.Parse(Console.ReadLine());
                     }
-                    catch (FormatException ex)
+                    catch (Exception)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("入力が正しくありません。");
                     }
                 } while (cnum < 1 || cnum > maxplayer);
             }
@@ -333,8 +333,7 @@ namespace RPSMulti
                         }
                     }
                 }
-                // グーvsチョキ（両端のケース）
-                else
+                else // グーvsチョキ（両端のケース）
                 {
                     for (int i = 0; i < pnum; i++)
                     {
