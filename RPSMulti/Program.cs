@@ -24,6 +24,8 @@ namespace RPSMulti
             string[] output = new string[(maxplayer * 2) + 1];
             List<string> rates = new List<string>();
 
+            Random random = new Random();
+
             // 前回勝率の読込
             if (File.Exists(@"Data\rates.csv") == false)
             {
@@ -60,7 +62,7 @@ namespace RPSMulti
                         }
                         else
                         {
-                            Console.WriteLine("プレーヤー{0}：参加せず", i);
+                            Console.WriteLine("プレーヤー{0}：不参加", i);
                         }
                     }
 
@@ -73,7 +75,7 @@ namespace RPSMulti
                         }
                         else
                         {
-                            Console.WriteLine("コンピューター{0}：参加せず", i - maxplayer + 1);
+                            Console.WriteLine("コンピューター{0}：不参加", i - maxplayer + 1);
                         }
                     }
                 }
@@ -219,8 +221,6 @@ namespace RPSMulti
                         }
                     }
 
-                    Random random = new Random();
-
                     // コンピューターの出力
                     for (int i = 0; i < cnum; i++)
                     {
@@ -240,7 +240,7 @@ namespace RPSMulti
                                 break;
                         }
 
-                        System.Threading.Thread.Sleep(100);
+                        System.Threading.Thread.Sleep(15);
                     }
 
                     Console.WriteLine();
