@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPSMulti
+namespace RPSRefactored
 {
     internal class Player
     {
@@ -16,6 +16,7 @@ namespace RPSMulti
         {
             this.Choice = -1;
             this.Score = 0;
+            this.Name = "プレイヤー";
         }
 
         // Properties
@@ -39,16 +40,28 @@ namespace RPSMulti
             }
         }
 
-        public int Score { get; set; } // 後期フェーズ用
+        public int Score { get; set; }
+
+        public string Name { get; set; }
 
         // Methods
         public void Reset()
         {
             this.Choice = -1;
         }
+
         public virtual void Shuffle(Random rand)
         {
             this.Choice = rand.Next();
+        }
+
+        public virtual void Judge(int winningchoice, int i)
+        {
+            if (this.Choice == winningchoice)
+            {
+                Console.Write("{0}{1}、", Name, i + 1);
+                this.Score++;
+            }
         }
     }
 }
