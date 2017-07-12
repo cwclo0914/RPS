@@ -9,7 +9,7 @@ namespace RPSMulti
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private void Main(string[] args)
         {
             // Common
             string continueflg = string.Empty;
@@ -300,7 +300,7 @@ namespace RPSMulti
         }
 
         // セーブデータ初期化
-        private static void SaveInitialise(int max)
+        private void SaveInitialise(int max)
         {
             string initialise = string.Empty;
             for (int i = 0; i < max; i++)
@@ -311,7 +311,7 @@ namespace RPSMulti
         }
 
         // 人数確認
-        private static void NumberConfirmation(string name, int max, ref int num)
+        private void NumberConfirmation(string name, int max, ref int num)
         {
             Console.WriteLine("{0}は何人ですか？", name);
 
@@ -332,7 +332,7 @@ namespace RPSMulti
         }
 
         // 0:グー、1:チョキ、2:パー
-        private static void AnnouncementAndCount(string name, int max, Player[] entity, ref int[] choicecount)
+        private void AnnouncementAndCount(string name, int max, Player[] entity, ref int[] choicecount)
         {
             for (int i = 0; i < max; i++)
             {
@@ -355,7 +355,7 @@ namespace RPSMulti
         }
 
         // スコア増加の判定（Scoreがプロパティであるためreturnによって回避）
-        private static void Judgement(string name, int max, int winningchoice, ref Player[] entity)
+        private void Judgement(string name, int max, int winningchoice, ref Player[] entity)
         {
             for (int i = 0; i < max; i++)
             {
