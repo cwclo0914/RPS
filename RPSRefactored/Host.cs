@@ -170,8 +170,6 @@ namespace RPSRefactored
         // 総ラウンド数(+1)を含めるStringの生成
         private void WriteFile()
         {
-            List<string> rates = new List<string>() { null };
-
             string s = string.Empty;
 
             for (int i = 0; i < (Settings.PMAX + Settings.CMAX) + 1; i++)
