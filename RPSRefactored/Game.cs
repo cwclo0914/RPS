@@ -20,7 +20,6 @@ namespace RPSRefactored
             Pnum = pnum;
             Cnum = cnum;
             TotalCount = 0;
-            IsRedo = false;
             EntityCreate();
         }
 
