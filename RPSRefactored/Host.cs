@@ -31,7 +31,6 @@ namespace RPSRefactored
         public void Main()
         {
             this.StartUp();
-            if (!IsContinue) NewGame();
             Rps.RPSMain();
             this.End();
         }
@@ -50,6 +49,8 @@ namespace RPSRefactored
 
             if (IsContinue == true)
                 IsContinue = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞");
+            else
+                NewGame();
         }
 
         // 小メソッド
@@ -118,17 +119,8 @@ namespace RPSRefactored
             Rps.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
         }
 
-        // セーブデータ初期化
-        private void InitialiseSave()
-        {
-            string initialise = string.Empty;
-            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
-                initialise += ",";
-
-            ContentsFileIO.Write(initialise);
-        }
-
-        //////////////////////// 人数定義 ////////////////////////
+        
+        // 初めからの場合
         private void NewGame()
         {
             int pnum = 0, cnum = 0;
@@ -139,13 +131,13 @@ namespace RPSRefactored
             Rps = new RPS(pnum, cnum);
         }
 
-        // 人数確認、出力
+        // 初めからの人数確認
         private int NumberConfirmation(string name, int max)
         {
             int num = 0;
             Console.WriteLine("{0}は何人ですか？", name);
 
-            do // PC
+            do
             {
                 Console.Write("1～{0}の数字を入力してください。＞", max);
                 int.TryParse(Console.ReadLine(), out num);
@@ -155,6 +147,15 @@ namespace RPSRefactored
             return num;
         }
 
+        // セーブデータ初期化
+        private void InitialiseSave()
+        {
+            string initialise = string.Empty;
+            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
+                initialise += ",";
+
+            ContentsFileIO.Write(initialise);
+        }
 
         //////////////////////// 終了処理 ////////////////////////
         private void End()
