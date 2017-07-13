@@ -41,20 +41,15 @@ namespace RPSRefactored
                     AnnouncementAndCount(p, Pnum);
                     AnnouncementAndCount(c, Cnum);
                     Console.WriteLine();
-
                 } while (IsDraw());
-
                 Judge();
-                IsRedo = ConsoleIO.YesNoQ("もう一度勝負しますか？（Y/N）＞");
-
-            } while (IsRedo);
+            } while (ConsoleIO.YesNoQ("もう一度勝負しますか？（Y/N）＞"));
         }
 
         //////////////////////// 小メソッド ////////////////////////
         // リセット
         private void Reset()
         {
-            IsRedo = false;
             for (int i = 0; i < Pnum; i++)
                 p[i].Reset();
             for (int i = 0; i < Cnum; i++)
