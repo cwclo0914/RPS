@@ -70,12 +70,19 @@ namespace RPSRefactored
             {
                 do
                 {
-                    Console.Write("プレイヤー{0}、入力してください。0:グー、1:チョキ、2:パー＞", i + 1);
+                    Console.Write("プレイヤー{0}、入力してください。0:グー、1:チョキ、2:パー；9:現状報告＞", i + 1);
+                    int temp = -1;
                     try
                     {
-                        p[i].Choice = int.Parse(Console.ReadLine());
+                        temp = int.Parse(Console.ReadLine());
                     }
                     catch (Exception) { }
+
+                    if (temp == 9)
+                        ReportCurrentScore();
+                    else
+                        p[i].Choice = temp;
+
                 } while (!(p[i].Choice >= 0 && p[i].Choice <= 2)); // 正しく入力するまで続く
             }
             Console.WriteLine();
@@ -151,6 +158,28 @@ namespace RPSRefactored
                 p[i].Scoring(winningchoice, i);
             for (int i = 0; i < Cnum; i++)
                 c[i].Scoring(winningchoice, i);
+        }
+
+        // 現在の点数を報告する
+        public void ReportCurrentScore()
+        {
+            string[] inter = new string[Settings.PMAX + Settings.CMAX + 1];
+
+            for (int i = 0; i < inter.Length; i++)
+            {
+                if (i < Pnum)
+                    inter[i] = p[i].Score.ToString();
+                else if (i < Settings.PMAX)
+                    inter[i] = string.Empty;
+                else if (i >= Settings.PMAX && i < Settings.PMAX + Cnum)
+                    inter[i] = c[i - Settings.PMAX].Score.ToString();
+                else if (i < Settings.PMAX + Settings.CMAX)
+                    inter[i] = string.Empty;
+                else
+                    inter[i] = TotalCount.ToString();
+            }
+
+            ConsoleIO.Result(inter);
         }
     }
 }

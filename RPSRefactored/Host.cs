@@ -12,14 +12,11 @@ namespace RPSRefactored
     internal class Host
     {
         // Fields
-        // 最大人数
-        const int pmax = 3; // Player
-        const int cmax = 5; // CPU
 
         // Constructors
         public Host()
         {
-            Buffer = new string[pmax + cmax + 1];
+            Buffer = new string[Settings.PMAX + Settings.CMAX + 1];
             IsContinue = true;
         }
 
@@ -34,8 +31,7 @@ namespace RPSRefactored
         public void Main()
         {
             this.StartUp();
-            this.NumberDef();
-            Rps.EntityCreate();
+            if (!IsContinue) NewGame();
             Rps.RPSMain();
             this.End();
         }
@@ -61,7 +57,7 @@ namespace RPSRefactored
         private void NewFile()
         {
             Console.WriteLine("新しいセーブデータを作成します。\n");
-            InitialiseSave(pmax + cmax);
+            InitialiseSave();
             IsContinue = false;
         }
 
@@ -72,13 +68,13 @@ namespace RPSRefactored
             {
                 Buffer = ContentsFileIO.Read().Split(',');
 
-                if (Buffer.Length != pmax + cmax + 1) // 最大人数変更後のセーブデータ初期化
+                if (Buffer.Length != Settings.PMAX + Settings.CMAX + 1) // 最大人数変更後のセーブデータ初期化
                 {
                     Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
                     ContentsFileIO.BackUp();
-                    InitialiseSave(pmax + cmax);
+                    InitialiseSave();
                 }
-            } while (Buffer.Length != pmax + cmax + 1);
+            } while (Buffer.Length != Settings.PMAX + Settings.CMAX + 1);
         }
 
         // 前回結果の表示
@@ -88,49 +84,51 @@ namespace RPSRefactored
                 IsContinue = false;
             else
             {
+                Continue();
                 Console.WriteLine("前回結果：");
-                ConsoleIO.Result(Buffer, pmax, cmax);
+                Rps.ReportCurrentScore();
             }
         }
 
-        // セーブデータ初期化
-        private void InitialiseSave(int max)
-        {
-            string initialise = string.Empty;
-            for (int i = 0; i < max; i++)
-                initialise += ",";
-            
-            ContentsFileIO.Write(initialise);
-        }
-
-        //////////////////////// 人数定義 ////////////////////////
-        private void NumberDef()
-        {
-            if (IsContinue)
-                Continue();
-            else
-                NewGame();
-        }
-
-        // 小メソッド
-        // 続きから
+        // 前回のデータでインスタンス生成
         private void Continue()
         {
             int pnum = 0, cnum = 0;
-            for (int i = 0; i < pmax + cmax; i++) // Bufferをスキャンして前回の人数を数える
+            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++) // Bufferをスキャンして前回の人数を数える
             {
                 if (Buffer[i] != string.Empty)
                 {
-                    if (i < pmax)
+                    if (i < Settings.PMAX)
                         pnum++;
                     else
                         cnum++;
                 }
             }
             Rps = new RPS(pnum, cnum);
+            ConvertScore(pnum, cnum);
         }
 
-        // 初めから
+        // 読み込んだ前回結果をEntityに反映する
+        private void ConvertScore(int pnum, int cnum)
+        {
+            for (int i = 0; i < pnum; i++)
+                Rps.p[i].Score = int.Parse(Buffer[i]);
+            for (int i = 0; i < cnum; i++)
+                Rps.c[i].Score = int.Parse(Buffer[i + Settings.PMAX]);
+            Rps.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
+        }
+
+        // セーブデータ初期化
+        private void InitialiseSave()
+        {
+            string initialise = string.Empty;
+            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
+                initialise += ",";
+
+            ContentsFileIO.Write(initialise);
+        }
+
+        //////////////////////// 人数定義 ////////////////////////
         private void NewGame()
         {
             int pnum = 0, cnum = 0;
@@ -139,8 +137,8 @@ namespace RPSRefactored
                 Buffer[i] = "0";
 
             // 人数確認
-            pnum = NumberConfirmation("プレイヤー", pmax); // Player
-            cnum = NumberConfirmation("コンピューター", cmax); // CPU
+            pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
+            cnum = NumberConfirmation("コンピューター", Settings.CMAX); // CPU
             Rps = new RPS(pnum, cnum);
         }
 
@@ -164,39 +162,10 @@ namespace RPSRefactored
         //////////////////////// 終了処理 ////////////////////////
         private void End()
         {
-            AddScore();
-            BlankNonPart();
-            ConsoleIO.Result(Buffer, pmax, cmax);
+            Rps.ReportCurrentScore();
             WriteFile();
 
             Console.WriteLine("終了します。お疲れ様でした。");
-        }
-
-        // 小メソッド
-        // 点数を足していく
-        private void AddScore()
-        {
-            for (int i = 0; i < Buffer.Length; i++)
-            {
-                if (i < Rps.Pnum)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.p[i].Score).ToString();
-                else if (i >= pmax && i < pmax + Rps.Cnum)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.c[i - pmax].Score).ToString();
-                else if (i == Buffer.Length - 1)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.TotalCount).ToString();
-            }
-        }
-
-        // 不参加なら空白にする
-        private void BlankNonPart()
-        {
-            for (int i = 0; i < Buffer.Length; i++)
-            {
-                if (i < pmax && i >= Rps.Pnum) // Player
-                    Buffer[i] = string.Empty;
-                else if (i < pmax + cmax && i >= pmax + Rps.Cnum) // CPU
-                    Buffer[i] = string.Empty;
-            }
         }
 
         // 総ラウンド数(+1)を含めるStringの生成
@@ -206,14 +175,14 @@ namespace RPSRefactored
 
             string s = string.Empty;
 
-            for (int i = 0; i < (pmax + cmax) + 1; i++)
+            for (int i = 0; i < (Settings.PMAX + Settings.CMAX) + 1; i++)
             {
                 if (i == 0)
                     s = Buffer[i];
                 else
                     s += ',' + Buffer[i];
             }
-            
+
             ContentsFileIO.Write(s);
         }
     }

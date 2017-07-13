@@ -21,6 +21,7 @@ namespace RPSRefactored
             Cnum = cnum;
             TotalCount = 0;
             IsRedo = false;
+            EntityCreate();
         }
 
         // Properties
