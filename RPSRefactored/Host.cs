@@ -47,9 +47,10 @@ namespace RPSRefactored
                 DisplayOldData();
             }
 
-            if (IsContinue == true)
+            if (IsContinue)
                 IsContinue = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞");
-            else
+            
+            if (!IsContinue)
                 NewGame();
         }
 
