@@ -18,11 +18,11 @@ namespace RPSRefactored
         public RPS(int pnum, int cnum)
             : base(pnum, cnum)
         {
-            choicecount = new int[3] { 0, 0, 0 };
+            ChoiceCount = new int[3] { 0, 0, 0 };
         }
 
         // Properties
-        public int[] choicecount { get; set; }
+        public int[] ChoiceCount { get; set; }
 
         // Methods
         //////////////////////// 大メソッド ////////////////////////
@@ -59,8 +59,8 @@ namespace RPSRefactored
                 p[i].Reset();
             for (int i = 0; i < Cnum; i++)
                 c[i].Reset();
-            for (int i = 0; i < choicecount.Length; i++)
-                choicecount[i] = 0;
+            for (int i = 0; i < ChoiceCount.Length; i++)
+                ChoiceCount[i] = 0;
         }
 
         // プレイヤー入力
@@ -100,15 +100,15 @@ namespace RPSRefactored
                 {
                     case 0:
                         Console.WriteLine("{0}{1}がグーを出しました。", e[i].Name, i + 1);
-                        choicecount[0]++;
+                        ChoiceCount[0]++;
                         break;
                     case 1:
                         Console.WriteLine("{0}{1}がチョキを出しました。", e[i].Name, i + 1);
-                        choicecount[1]++;
+                        ChoiceCount[1]++;
                         break;
                     case 2:
                         Console.WriteLine("{0}{1}がパーを出しました。", e[i].Name, i + 1);
-                        choicecount[2]++;
+                        ChoiceCount[2]++;
                         break;
                 }
             }
@@ -118,8 +118,8 @@ namespace RPSRefactored
         private bool IsDraw()
         {
             int zerocount = 0;
-            for (int i = 0; i < choicecount.Length; i++)
-                if (choicecount[i] == 0)
+            for (int i = 0; i < ChoiceCount.Length; i++)
+                if (ChoiceCount[i] == 0)
                     zerocount++;
 
             if (zerocount != 1) // グーチョキパーどれか一つだけが0じゃないとあいこ
@@ -133,15 +133,15 @@ namespace RPSRefactored
         // 勝負判定
         private void Judge()
         {
-            if (choicecount[0] == 0) // グーが0  → チョキvsパー、(1)チョキが勝つ
+            if (ChoiceCount[0] == 0) // グーが0  → チョキvsパー、(1)チョキが勝つ
                 ScoringJudgement(1);
-            else if (choicecount[1] == 0) // チョキが0　→　グーvsパー、(2)パーが勝つ
+            else if (ChoiceCount[1] == 0) // チョキが0　→　グーvsパー、(2)パーが勝つ
                 ScoringJudgement(2);
-            else if (choicecount[2] == 0) // パーが0　→　グーvsチョキ、(0)グーが勝つ
+            else if (ChoiceCount[2] == 0) // パーが0　→　グーvsチョキ、(0)グーが勝つ
                 ScoringJudgement(0);
 
             Console.WriteLine("の勝ちです。\n");
-            Totalcount++; // 勝負がついたのでカウント
+            TotalCount++; // 勝負がついたのでカウント
         }
 
         // 各Entityの勝敗を決める

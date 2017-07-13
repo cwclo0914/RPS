@@ -19,7 +19,7 @@ namespace RPSRefactored
         {
             Pnum = pnum;
             Cnum = cnum;
-            Totalcount = 0;
+            TotalCount = 0;
             IsRedo = false;
         }
 
@@ -29,7 +29,7 @@ namespace RPSRefactored
 
         public int Pnum { get; set; }
         public int Cnum { get; set; }
-        public int Totalcount { get; set; }
+        public int TotalCount { get; set; }
         public bool IsRedo { get; set; }
 
         // Methods
