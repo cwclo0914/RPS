@@ -191,7 +191,7 @@ namespace RPSRefactored
                 else if (i >= pmax && i < pmax + cnum)
                     Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.c[i - pmax].Score).ToString();
                 else if (i == Buffer.Length - 1)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.Totalcount).ToString();
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.TotalCount).ToString();
             }
         }
 
