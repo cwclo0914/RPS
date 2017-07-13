@@ -32,13 +32,9 @@ namespace RPSRefactored
             set
             {
                 if (value >= 0 && value <= 2)
-                {
                     this.choice = value;
-                }
                 else
-                {
                     this.choice = -1;
-                }
             }
         }
 
