@@ -8,7 +8,7 @@ using System.IO;
 namespace RPSRefactored
 {
     /// <summary>
-    /// ユーザーとGameをつなげるホスト
+    /// ユーザーとGameをつなげるホスト、前回結果を保持する
     /// </summary>
     internal class Host
     {
@@ -110,19 +110,15 @@ namespace RPSRefactored
         //////////////////////// 人数定義 ////////////////////////
         private void NumberDef()
         {
-            var numset = new Tuple<int, int>(0, 0);
-
             if (IsContinue)
-                numset = Continue();
+                Continue();
             else
-                numset = NewGame();
-
-            Rps = new RPS(numset.Item1, numset.Item2);
+                NewGame();
         }
 
         // 小メソッド
         // 続きから
-        private Tuple<int, int> Continue()
+        private void Continue()
         {
             int pnum = 0, cnum = 0;
             for (int i = 0; i < pmax + cmax; i++) // Bufferをスキャンして前回の人数を数える
@@ -135,11 +131,11 @@ namespace RPSRefactored
                         cnum++;
                 }
             }
-            return new Tuple<int, int>(pnum, cnum);
+            Rps = new RPS(pnum, cnum);
         }
 
         // 初めから
-        private Tuple<int,int> NewGame()
+        private void NewGame()
         {
             int pnum = 0, cnum = 0;
             // 前回のデータを消す
@@ -149,7 +145,7 @@ namespace RPSRefactored
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", pmax); // Player
             cnum = NumberConfirmation("コンピューター", cmax); // CPU
-            return new Tuple<int, int>(pnum, cnum);
+            Rps = new RPS(pnum, cnum);
         }
 
         // 人数確認、出力
