@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace RPSRefactored
 {
@@ -45,7 +44,7 @@ namespace RPSRefactored
         private void StartUp()
         {
             // 前回勝率の表示
-            if (File.Exists(@"Data\rates.csv") == false)
+            if (ContentsFileIO.Read() == string.Empty)
                 NewFile();
             else
             {
@@ -71,9 +70,7 @@ namespace RPSRefactored
         {
             do
             {
-                List<string> rates = new List<string>() { null };
-                rates = ContentsFileIO.Read();
-                Buffer = rates[0].Split(',');
+                Buffer = ContentsFileIO.Read().Split(',');
 
                 if (Buffer.Length != pmax + cmax + 1) // 最大人数変更後のセーブデータ初期化
                 {
@@ -102,9 +99,8 @@ namespace RPSRefactored
             string initialise = string.Empty;
             for (int i = 0; i < max; i++)
                 initialise += ",";
-
-            List<string> empty = new List<string> { initialise + Environment.NewLine };
-            ContentsFileIO.Write(empty);
+            
+            ContentsFileIO.Write(initialise);
         }
 
         //////////////////////// 人数定義 ////////////////////////
@@ -217,9 +213,8 @@ namespace RPSRefactored
                 else
                     s += ',' + Buffer[i];
             }
-
-            rates.Add(s + Environment.NewLine);
-            ContentsFileIO.Write(rates);
+            
+            ContentsFileIO.Write(s);
         }
     }
 }
