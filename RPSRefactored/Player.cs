@@ -6,60 +6,33 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
-    internal class Player
+    internal class Player : Entity
     {
-        // Fields
-        private int choice; // 0:グー、1:チョキ、2:パー
-
         // Constructor
         public Player()
         {
-            this.Choice = -1;
-            this.Score = 0;
             this.Name = "プレイヤー";
         }
 
         // Properties
-        public int Choice // 0:グー、1:チョキ、2:パー
-        {
-            get
-            {
-                return this.choice;
-            }
-
-            set
-            {
-                if (value >= 0 && value <= 2)
-                {
-                    this.choice = value;
-                }
-                else
-                {
-                    this.choice = -1;
-                }
-            }
-        }
-
-        public int Score { get; set; }
-
-        public string Name { get; set; }
+        public override string Name { get; set; }
 
         // Methods
-        public void Reset()
+        public override void Reset()
         {
             this.Choice = -1;
         }
 
-        public virtual void Shuffle(Random rand)
+        public override void Shuffle(Random rand)
         {
-            this.Choice = rand.Next();
+            throw new NotImplementedException();
         }
 
-        public virtual void Judge(int winningchoice, int i)
+        public override void Scoring(int winningchoice, int i)
         {
             if (this.Choice == winningchoice)
             {
-                Console.Write("{0}{1}、", Name, i + 1);
+                Console.Write("{0}{1}、", this.Name, i + 1);
                 this.Score++;
             }
         }

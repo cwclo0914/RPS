@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
-    internal class Computer : Player
+    internal class Computer : Entity
     {
-        // Fields
-
         // Constructor
         public Computer()
         {
@@ -17,19 +15,24 @@ namespace RPSRefactored
         }
 
         // Properties
-        public new string Name { get; set; }
+        public override string Name { get; set; }
 
         // Methods
+        public override void Reset()
+        {
+            this.Choice = -1;
+        }
+
         public override void Shuffle(Random rand)
         {
             this.Choice = rand.Next(0, 3);
         }
 
-        public override void Judge(int winningchoice, int i)
+        public override void Scoring(int winningchoice, int i)
         {
             if (this.Choice == winningchoice)
             {
-                Console.Write("{0}{1}、", Name, i + 1);
+                Console.Write("{0}{1}、", this.Name, i + 1);
                 this.Score++;
             }
         }
