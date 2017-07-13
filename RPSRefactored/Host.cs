@@ -15,29 +15,28 @@ namespace RPSRefactored
         // Fields
         // 最大人数
         const int pmax = 3; // Player
-        const int cmax = 3; // CPU
+        const int cmax = 5; // CPU
 
-        int pnum;
-        int cnum;
+        private int pnum;
+        private int cnum;
 
         // Constructors
         public Host()
         {
-            buffer = new string[pmax + cmax + 1];
+            Buffer = new string[pmax + cmax + 1];
             pnum = 0;
             cnum = 0;
-            IsContinue = false;
+            IsContinue = true;
         }
 
         // Properties
         public RPS rps { get; set; }
-
-        public string[] buffer { get; set; }
-
-        public int gamechoice { get; set; }
+        public string[] Buffer { get; set; }
+        public int GameChoice { get; set; }
         public bool IsContinue { get; set; }
 
         // Methods
+        ////////////////////// メインメソッド //////////////////////
         public void Main()
         {
             this.StartUp();
@@ -47,57 +46,63 @@ namespace RPSRefactored
 
             rps.EntityCreate();
             rps.RPSMain();
-
             this.End();
         }
 
-        //////////////////////// 大メソッド ////////////////////////
-        // 起動処理（ファイルロード）→　継続フラグを出力
+        //////////////////////// 起動処理 ////////////////////////
         private void StartUp()
         {
-            List<string> rates = new List<string>();
-            buffer = new string[pmax + cmax + 1];
-
             // 前回勝率の表示
             if (File.Exists(@"Data\rates.csv") == false)
-            {
-                Console.WriteLine("新しいセーブデータを作成します。");
-                SaveInitialise(pmax + cmax);
-                Console.WriteLine();
-                IsContinue = false;
-            }
+                NewFile();
             else
             {
-                rates = ContentsFileIO.Read();
-
-                buffer = rates[0].Split(',');
-
-                // 最大人数変更後のセーブデータ初期化
-                if (buffer.Length != pmax + cmax + 1)
-                {
-                    Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。");
-                    ContentsFileIO.BackUp();
-
-                    SaveInitialise(pmax + cmax);
-
-                    rates = ContentsFileIO.Read();
-                    buffer = rates[0].Split(',');
-
-                    Console.WriteLine();
-                }
-
-                // 空白セーブ（Rounds = 0）を読み込んだ場合
-                if (buffer[buffer.Length - 1] == string.Empty)
-                    IsContinue = false;
-                else
-                {
-                    // 画面の表示
-                    Console.WriteLine("前回結果：");
-                    ConsoleIO.Result(buffer, pmax, cmax);
-                }
+                ReadOldFile();
+                DisplayOldData();
             }
 
-            IsContinue = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞");
+            if (IsContinue == true)
+                IsContinue = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞");
+        }
+
+        // 小メソッド
+        // セーブファイル作成
+        private void NewFile()
+        {
+            Console.WriteLine("新しいセーブデータを作成します。");
+            SaveInitialise(pmax + cmax);
+            Console.WriteLine();
+            IsContinue = false;
+        }
+
+        // セーブファイルを読み込む
+        private void ReadOldFile()
+        {
+            do
+            {
+                List<string> rates = new List<string>() { null };
+                rates = ContentsFileIO.Read();
+                Buffer = rates[0].Split(',');
+
+                if (Buffer.Length != pmax + cmax + 1) // 最大人数変更後のセーブデータ初期化
+                {
+                    Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
+                    ContentsFileIO.BackUp();
+                    SaveInitialise(pmax + cmax);
+                }
+            } while (Buffer.Length != pmax + cmax + 1);
+        }
+
+        // 前回結果の表示
+        private void DisplayOldData()
+        {
+            if (Buffer[Buffer.Length - 1] == string.Empty) // 空白セーブ（Rounds = 0）を読み込んだ場合
+                IsContinue = false;
+            else
+            {
+                Console.WriteLine("前回結果：");
+                ConsoleIO.Result(Buffer, pmax, cmax);
+            }
         }
 
         // セーブデータ初期化
@@ -111,23 +116,22 @@ namespace RPSRefactored
             ContentsFileIO.Write(empty);
         }
 
-
-        //////////////////////// 大メソッド ////////////////////////
-        // 人数定義（インスタンス生成）
+        //////////////////////// 人数定義 ////////////////////////
         private void NumberDef()
         {
-            if(IsContinue)
+            if (IsContinue)
                 Continue();
             else
                 NewGame();
         }
 
+        // 小メソッド
         // 続きから
         private void Continue()
         {
-            for (int i = 0; i < pmax + cmax; i++) // bufferをスキャンして前回の人数を数える
+            for (int i = 0; i < pmax + cmax; i++) // Bufferをスキャンして前回の人数を数える
             {
-                if (buffer[i] != string.Empty)
+                if (Buffer[i] != string.Empty)
                 {
                     if (i < pmax)
                         pnum++;
@@ -141,15 +145,15 @@ namespace RPSRefactored
         private void NewGame()
         {
             // 前回のデータを消す
-            for (int i = 0; i < buffer.Length; i++)
-                buffer[i] = "0";
+            for (int i = 0; i < Buffer.Length; i++)
+                Buffer[i] = "0";
 
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", pmax); // Player
             cnum = NumberConfirmation("コンピューター", cmax); // CPU
         }
 
-        // 人数確認　→　人数を出力
+        // 人数確認、出力
         private int NumberConfirmation(string name, int max)
         {
             int num = 0;
@@ -166,50 +170,61 @@ namespace RPSRefactored
         }
 
 
-        //////////////////////// 大メソッド ////////////////////////
-        // 終了処理（結果報告、ファイルセーブ）
+        //////////////////////// 終了処理 ////////////////////////
         private void End()
+        {
+            AddScore();
+            BlankNonPart();
+            ConsoleIO.Result(Buffer, pmax, cmax);
+            WriteFile();
+
+            Console.WriteLine("終了します。お疲れ様でした。");
+        }
+
+        // 小メソッド
+        // 点数を足していく
+        private void AddScore()
+        {
+            for (int i = 0; i < Buffer.Length; i++)
+            {
+                if (i < pnum)
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.p[i].Score).ToString();
+                else if (i >= pmax && i < pmax + cnum)
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.c[i - pmax].Score).ToString();
+                else if (i == Buffer.Length - 1)
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.Totalcount).ToString();
+            }
+        }
+
+        // 不参加なら空白にする
+        private void BlankNonPart()
+        {
+            for (int i = 0; i < Buffer.Length; i++)
+            {
+                if (i < pmax && i >= pnum) // Player
+                    Buffer[i] = string.Empty;
+                else if (i < pmax + cmax && i >= pmax + cnum) // CPU
+                    Buffer[i] = string.Empty;
+            }
+        }
+
+        // 総ラウンド数(+1)を含めるStringの生成
+        private void WriteFile()
         {
             List<string> rates = new List<string>() { null };
 
-            // 点数を足していく
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                if (i < pnum)
-                    buffer[i] = (Convert.ToInt32(buffer[i]) + rps.p[i].Score).ToString();
-                else if (i >= pmax && i < pmax + cnum)
-                    buffer[i] = (Convert.ToInt32(buffer[i]) + rps.c[i - pmax].Score).ToString();
-                else if (i == buffer.Length - 1)
-                    buffer[i] = (Convert.ToInt32(buffer[i]) + rps.Totalcount).ToString();
-            }
-
-            // 不参加ならbufferを空白にする
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                if (i < pmax && i >= pnum) // Player
-                    buffer[i] = string.Empty;
-                else if (i < pmax + cmax && i >= pmax + cnum) // CPU
-                    buffer[i] = string.Empty;
-            }
-
-            // 結果報告
-            ConsoleIO.Result(buffer, pmax, cmax);
-
-            // 総ラウンド数(+1)を含めるStringの生成
             string s = string.Empty;
 
             for (int i = 0; i < (pmax + cmax) + 1; i++)
             {
                 if (i == 0)
-                    s = buffer[i];
+                    s = Buffer[i];
                 else
-                    s += ',' + buffer[i];
+                    s += ',' + Buffer[i];
             }
 
             rates.Add(s + Environment.NewLine);
             ContentsFileIO.Write(rates);
-
-            Console.WriteLine("終了します。お疲れ様でした。");
         }
     }
 }

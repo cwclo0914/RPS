@@ -30,9 +30,7 @@ namespace RPSRefactored
         // 結果発表
         public static void Result(string[] r, int pmax, int cmax)
         {
-            // 総ラウンド数
             Console.WriteLine("総ラウンド数：{0}", r[r.Length - 1]);
-
             for (int i = 0; i < pmax + cmax; i++)
             {
                 if (r[i] != string.Empty)
@@ -43,14 +41,7 @@ namespace RPSRefactored
                         Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - pmax + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100, 1));
                 }
             }
-        }
-
-        // プロパティをTryParseする回避策
-        public static int ParseOrDefault(string text)
-        {
-            int tmp = 0;
-            int.TryParse(text, out tmp);
-            return tmp;
+            Console.WriteLine();
         }
     }
 }

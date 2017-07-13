@@ -18,22 +18,18 @@ namespace RPSRefactored
         public RPS(int pnum, int cnum)
             : base(pnum, cnum)
         {
-            Totalcount = 0;
-            IsRedo = false;
             choicecount = new int[3] { 0, 0, 0 };
         }
 
         // Properties
-        public int Totalcount { get; set; }
         public int[] choicecount { get; set; }
-        public bool IsRedo { get; set; }
 
         // Methods
         //////////////////////// 大メソッド ////////////////////////
         // じゃんけんメイン　→　ラウンド数を出力
         public void RPSMain()
         {
-            Console.WriteLine("\n　★　☆　★　じゃんけんへようこそ　★　☆　★　\n");
+            Console.WriteLine("　★　☆　★　じゃんけんへようこそ　★　☆　★　\n");
 
             do // "N"を入力するまで続く
             {
@@ -44,10 +40,11 @@ namespace RPSRefactored
                     ComputerShuffle();
                     AnnouncementAndCount(p, Pnum);
                     AnnouncementAndCount(c, Cnum);
+                    Console.WriteLine();
 
-                } while (IsDraw()); 
+                } while (IsDraw());
 
-                Judgement();
+                Judge();
                 IsRedo = ConsoleIO.YesNoQ("もう一度勝負しますか？（Y/N）＞");
 
             } while (IsRedo);
@@ -74,7 +71,11 @@ namespace RPSRefactored
                 do
                 {
                     Console.Write("プレイヤー{0}、入力してください。0:グー、1:チョキ、2:パー＞", i + 1);
-                    p[i].Choice = ConsoleIO.ParseOrDefault(Console.ReadLine());
+                    try
+                    {
+                        p[i].Choice = int.Parse(Console.ReadLine());
+                    }
+                    catch (Exception) { }
                 } while (!(p[i].Choice >= 0 && p[i].Choice <= 2)); // 正しく入力するまで続く
             }
             Console.WriteLine();
@@ -90,7 +91,7 @@ namespace RPSRefactored
             }
         }
 
-        // ラウンドごとの報告、カウント（0:グー、1:チョキ、2:パー）
+        // ラウンドごとの報告とカウント（0:グー、1:チョキ、2:パー）
         private void AnnouncementAndCount(Entity[] e, int num)
         {
             for (int i = 0; i < num; i++)
@@ -116,13 +117,12 @@ namespace RPSRefactored
         // 引き分け判定
         private bool IsDraw()
         {
-            Console.WriteLine();
             int zerocount = 0;
             for (int i = 0; i < choicecount.Length; i++)
                 if (choicecount[i] == 0)
                     zerocount++;
 
-            if (zerocount != 1) // グーチョキパーどれか一つが0じゃないとあいこ
+            if (zerocount != 1) // グーチョキパーどれか一つだけが0じゃないとあいこ
             {
                 Console.WriteLine("あいこです。もう一度勝負します。\n");
                 return true;
@@ -131,25 +131,20 @@ namespace RPSRefactored
         }
 
         // 勝負判定
-        private void Judgement()
+        private void Judge()
         {
-            if (choicecount[choicecount.Length - 1] == 0) // パーが0　→　グーvsチョキ、(0)グーが勝つ
-            {
+            if (choicecount[0] == 0) // グーが0  → チョキvsパー、(1)チョキが勝つ
+                ScoringJudgement(1);
+            else if (choicecount[1] == 0) // チョキが0　→　グーvsパー、(2)パーが勝つ
+                ScoringJudgement(2);
+            else if (choicecount[2] == 0) // パーが0　→　グーvsチョキ、(0)グーが勝つ
                 ScoringJudgement(0);
-                Console.WriteLine("の勝ちです。\n");
-            }
-            else  // グーが0 or チョキが0 → チョキvsパー、(0+1 = 1)チョキが勝つ; グーvsパー、(1+1 = 2)パーが勝つ
-            {
-                for (int j = 0; j < choicecount.Length - 1; j++)
-                    if (choicecount[j] == 0)
-                        ScoringJudgement(j + 1);
-                Console.WriteLine("の勝ちです。\n");
-            }
 
+            Console.WriteLine("の勝ちです。\n");
             Totalcount++; // 勝負がついたのでカウント
         }
 
-        // 点数の引き上げ
+        // 各Entityの勝敗を決める
         private void ScoringJudgement(int winningchoice)
         {
             for (int i = 0; i < Pnum; i++)

@@ -12,15 +12,15 @@ namespace RPSRefactored
     /// </summary>
     internal class Game
     {
-        // 最大人数設定
-        const int pmax = 3; // Player
-        const int cmax = 3; // CPU
+        // Fields
 
         // Constructors
         public Game(int pnum, int cnum)
         {
             Pnum = pnum;
             Cnum = cnum;
+            Totalcount = 0;
+            IsRedo = false;
         }
 
         // Properties
@@ -29,12 +29,11 @@ namespace RPSRefactored
 
         public int Pnum { get; set; }
         public int Cnum { get; set; }
-        
+        public int Totalcount { get; set; }
+        public bool IsRedo { get; set; }
 
         // Methods
-        //////////////////////// 大メソッド ////////////////////////
         // インスタンス生成
-
         public void EntityCreate()
         {
             p = new Entity[Pnum];
