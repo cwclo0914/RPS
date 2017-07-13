@@ -69,9 +69,8 @@ namespace RPSRefactored
         // セーブファイル作成
         private void NewFile()
         {
-            Console.WriteLine("新しいセーブデータを作成します。");
-            SaveInitialise(pmax + cmax);
-            Console.WriteLine();
+            Console.WriteLine("新しいセーブデータを作成します。\n");
+            InitialiseSave(pmax + cmax);
             IsContinue = false;
         }
 
@@ -88,7 +87,7 @@ namespace RPSRefactored
                 {
                     Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
                     ContentsFileIO.BackUp();
-                    SaveInitialise(pmax + cmax);
+                    InitialiseSave(pmax + cmax);
                 }
             } while (Buffer.Length != pmax + cmax + 1);
         }
@@ -106,7 +105,7 @@ namespace RPSRefactored
         }
 
         // セーブデータ初期化
-        private void SaveInitialise(int max)
+        private void InitialiseSave(int max)
         {
             string initialise = string.Empty;
             for (int i = 0; i < max; i++)
