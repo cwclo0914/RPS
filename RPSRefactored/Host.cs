@@ -56,7 +56,7 @@ namespace RPSRefactored
         private void NewFile()
         {
             Console.WriteLine("新しいセーブデータを作成します。\n");
-            WriteFile(true);
+            ContentsIO.WriteFile(true);
             IsContinue = false;
         }
 
@@ -71,7 +71,7 @@ namespace RPSRefactored
                 {
                     Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
                     ContentsFileIO.BackUp();
-                    WriteFile(true);
+                    ContentsIO.WriteFile(true);
                 }
             } while (Buffer.Length != Settings.PMAX + Settings.CMAX + 1);
         }
