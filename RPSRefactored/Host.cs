@@ -17,20 +17,15 @@ namespace RPSRefactored
         const int pmax = 3; // Player
         const int cmax = 5; // CPU
 
-        private int pnum;
-        private int cnum;
-
         // Constructors
         public Host()
         {
             Buffer = new string[pmax + cmax + 1];
-            pnum = 0;
-            cnum = 0;
             IsContinue = true;
         }
 
         // Properties
-        public RPS rps { get; set; }
+        public RPS Rps { get; set; }
         public string[] Buffer { get; set; }
         public int GameChoice { get; set; }
         public bool IsContinue { get; set; }
@@ -41,11 +36,8 @@ namespace RPSRefactored
         {
             this.StartUp();
             this.NumberDef();
-
-            rps = new RPS(pnum, cnum);
-
-            rps.EntityCreate();
-            rps.RPSMain();
+            Rps.EntityCreate();
+            Rps.RPSMain();
             this.End();
         }
 
@@ -118,16 +110,21 @@ namespace RPSRefactored
         //////////////////////// 人数定義 ////////////////////////
         private void NumberDef()
         {
+            var numset = new Tuple<int, int>(0, 0);
+
             if (IsContinue)
-                Continue();
+                numset = Continue();
             else
-                NewGame();
+                numset = NewGame();
+
+            Rps = new RPS(numset.Item1, numset.Item2);
         }
 
         // 小メソッド
         // 続きから
-        private void Continue()
+        private Tuple<int, int> Continue()
         {
+            int pnum = 0, cnum = 0;
             for (int i = 0; i < pmax + cmax; i++) // Bufferをスキャンして前回の人数を数える
             {
                 if (Buffer[i] != string.Empty)
@@ -138,11 +135,13 @@ namespace RPSRefactored
                         cnum++;
                 }
             }
+            return new Tuple<int, int>(pnum, cnum);
         }
 
         // 初めから
-        private void NewGame()
+        private Tuple<int,int> NewGame()
         {
+            int pnum = 0, cnum = 0;
             // 前回のデータを消す
             for (int i = 0; i < Buffer.Length; i++)
                 Buffer[i] = "0";
@@ -150,6 +149,7 @@ namespace RPSRefactored
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", pmax); // Player
             cnum = NumberConfirmation("コンピューター", cmax); // CPU
+            return new Tuple<int, int>(pnum, cnum);
         }
 
         // 人数確認、出力
@@ -186,12 +186,12 @@ namespace RPSRefactored
         {
             for (int i = 0; i < Buffer.Length; i++)
             {
-                if (i < pnum)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.p[i].Score).ToString();
-                else if (i >= pmax && i < pmax + cnum)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.c[i - pmax].Score).ToString();
+                if (i < Rps.Pnum)
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.p[i].Score).ToString();
+                else if (i >= pmax && i < pmax + Rps.Cnum)
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.c[i - pmax].Score).ToString();
                 else if (i == Buffer.Length - 1)
-                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + rps.TotalCount).ToString();
+                    Buffer[i] = (Convert.ToInt32(Buffer[i]) + Rps.TotalCount).ToString();
             }
         }
 
@@ -200,9 +200,9 @@ namespace RPSRefactored
         {
             for (int i = 0; i < Buffer.Length; i++)
             {
-                if (i < pmax && i >= pnum) // Player
+                if (i < pmax && i >= Rps.Pnum) // Player
                     Buffer[i] = string.Empty;
-                else if (i < pmax + cmax && i >= pmax + cnum) // CPU
+                else if (i < pmax + cmax && i >= pmax + Rps.Cnum) // CPU
                     Buffer[i] = string.Empty;
             }
         }
