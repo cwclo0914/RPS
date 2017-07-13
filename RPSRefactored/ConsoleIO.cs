@@ -45,7 +45,7 @@ namespace RPSRefactored
         }
         
         // Stringの生成とCSVへの書き込み
-        private void WriteFile(bool init, string[] buffer = null)
+        public static void WriteFile(bool init, string[] buffer = null)
         {
             string s = string.Empty;
             for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
