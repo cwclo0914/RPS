@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
-    abstract class Entity
+    /// <summary>
+    /// PlayerとCPUの元
+    /// </summary>
+    abstract internal class Entity
     {
         // Fields
         private int choice; // 0:グー、1:チョキ、2:パー

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
+    /// <summary>
+    /// CPUの設定
+    /// </summary>
     internal class Computer : Entity
     {
         // Constructor

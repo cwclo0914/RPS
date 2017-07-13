@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
+    /// <summary>
+    /// Playerの設定
+    /// </summary>
     internal class Player : Entity
     {
         // Constructor

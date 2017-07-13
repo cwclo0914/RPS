@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
-    class Game
+    /// <summary>
+    /// 様々なゲームが生成できるゲームプール（予定）
+    /// ゲームに応じてゲーム内の人数を作成するので、Entityの情報を保持する
+    /// </summary>
+    internal class Game
     {
         // 最大人数設定
         const int pmax = 3; // Player

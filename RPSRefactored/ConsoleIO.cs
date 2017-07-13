@@ -6,20 +6,25 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
+    /// <summary>
+    /// ゲームの中で共通する便利なIO Methods
+    /// </summary>
     internal static class ConsoleIO
     {
         // Methods
         // "Y/N"答えるまで出させないループ
-        public static char YesNoQ(string cout, char cin)
+        public static bool YesNoQ(string cout)
         {
+            char cin = '0';
+
             while (!(cin == 'Y' || cin == 'y' || cin == 'N' || cin == 'n'))
             {
                 Console.Write("{0}", cout);
                 char.TryParse(Console.ReadLine(), out cin);
                 Console.WriteLine();
             }
-
-            return cin;
+            if (cin == 'Y' || cin == 'y') return true;
+            else return false;
         }
 
         // 結果発表
@@ -38,6 +43,14 @@ namespace RPSRefactored
                         Console.WriteLine("コンピューター{0}：{1}/{2} ({3}%)", i - pmax + 1, r[i], r[r.Length - 1], Math.Round(Convert.ToDouble(r[i]) / Convert.ToDouble(r[r.Length - 1]) * 100, 1));
                 }
             }
+        }
+
+        // プロパティをTryParseする回避策
+        public static int ParseOrDefault(string text)
+        {
+            int tmp = 0;
+            int.TryParse(text, out tmp);
+            return tmp;
         }
     }
 }

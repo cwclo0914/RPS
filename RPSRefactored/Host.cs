@@ -7,7 +7,10 @@ using System.IO;
 
 namespace RPSRefactored
 {
-    class Host
+    /// <summary>
+    /// ユーザーとGameをつなげるホスト
+    /// </summary>
+    internal class Host
     {
         // Fields
         // 最大人数
@@ -23,6 +26,7 @@ namespace RPSRefactored
             buffer = new string[pmax + cmax + 1];
             pnum = 0;
             cnum = 0;
+            IsContinue = false;
         }
 
         // Properties
@@ -31,10 +35,9 @@ namespace RPSRefactored
         public string[] buffer { get; set; }
 
         public int gamechoice { get; set; }
-        public char continueflg { get; set; }
+        public bool IsContinue { get; set; }
 
         // Methods
-        ////////////////////////// メイン //////////////////////////
         public void Main()
         {
             this.StartUp();
@@ -50,7 +53,7 @@ namespace RPSRefactored
 
         //////////////////////// 大メソッド ////////////////////////
         // 起動処理（ファイルロード）→　継続フラグを出力
-        private char StartUp()
+        private void StartUp()
         {
             List<string> rates = new List<string>();
             buffer = new string[pmax + cmax + 1];
@@ -61,7 +64,7 @@ namespace RPSRefactored
                 Console.WriteLine("新しいセーブデータを作成します。");
                 SaveInitialise(pmax + cmax);
                 Console.WriteLine();
-                continueflg = 'N';
+                IsContinue = false;
             }
             else
             {
@@ -85,7 +88,7 @@ namespace RPSRefactored
 
                 // 空白セーブ（Rounds = 0）を読み込んだ場合
                 if (buffer[buffer.Length - 1] == string.Empty)
-                    continueflg = 'N';
+                    IsContinue = false;
                 else
                 {
                     // 画面の表示
@@ -94,8 +97,7 @@ namespace RPSRefactored
                 }
             }
 
-            continueflg = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞", continueflg);
-            return continueflg;
+            IsContinue = ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞");
         }
 
         // セーブデータ初期化
@@ -114,29 +116,37 @@ namespace RPSRefactored
         // 人数定義（インスタンス生成）
         private void NumberDef()
         {
-            if (continueflg == 'Y' || continueflg == 'y') // 続きから
+            if(IsContinue)
+                Continue();
+            else
+                NewGame();
+        }
+
+        // 続きから
+        private void Continue()
+        {
+            for (int i = 0; i < pmax + cmax; i++) // bufferをスキャンして前回の人数を数える
             {
-                for (int i = 0; i < pmax + cmax; i++) // bufferをスキャンして前回の人数を数える
+                if (buffer[i] != string.Empty)
                 {
-                    if (buffer[i] != string.Empty)
-                    {
-                        if (i < pmax)
-                            pnum++;
-                        else
-                            cnum++;
-                    }
+                    if (i < pmax)
+                        pnum++;
+                    else
+                        cnum++;
                 }
             }
-            else // 初めから
-            {
-                // 前回のデータを消す
-                for (int i = 0; i < buffer.Length; i++)
-                    buffer[i] = "0";
+        }
 
-                // 人数確認
-                pnum = NumberConfirmation("プレイヤー", pmax); // Player
-                cnum = NumberConfirmation("コンピューター", cmax); // CPU
-            }
+        // 初めから
+        private void NewGame()
+        {
+            // 前回のデータを消す
+            for (int i = 0; i < buffer.Length; i++)
+                buffer[i] = "0";
+
+            // 人数確認
+            pnum = NumberConfirmation("プレイヤー", pmax); // Player
+            cnum = NumberConfirmation("コンピューター", cmax); // CPU
         }
 
         // 人数確認　→　人数を出力
@@ -145,7 +155,7 @@ namespace RPSRefactored
             int num = 0;
             Console.WriteLine("{0}は何人ですか？", name);
 
-            do
+            do // PC
             {
                 Console.Write("1～{0}の数字を入力してください。＞", max);
                 int.TryParse(Console.ReadLine(), out num);
