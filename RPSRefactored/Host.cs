@@ -132,9 +132,6 @@ namespace RPSRefactored
         private void NewGame()
         {
             int pnum = 0, cnum = 0;
-            // 前回のデータを消す
-            for (int i = 0; i < Buffer.Length; i++)
-                Buffer[i] = "0";
 
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
