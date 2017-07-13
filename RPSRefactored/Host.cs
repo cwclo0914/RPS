@@ -44,7 +44,7 @@ namespace RPSRefactored
             else
             {
                 ReadOldFile();
-                DisplayOldData();
+                UseOldFile();
             }
 
             if (!IsContinue || !ConsoleIO.YesNoQ("続きから始めますか？（Y/N）＞"))
@@ -52,7 +52,7 @@ namespace RPSRefactored
         }
 
         // 小メソッド
-        // セーブファイル作成
+        // セーブファイルを作成
         private void NewFile()
         {
             Console.WriteLine("新しいセーブデータを作成します。\n");
@@ -76,8 +76,8 @@ namespace RPSRefactored
             } while (Buffer.Length != Settings.PMAX + Settings.CMAX + 1);
         }
 
-        // 前回結果の表示
-        private void DisplayOldData()
+        // セーブファイルを使用
+        private void UseOldFile()
         {
             if (Buffer[Buffer.Length - 1] == string.Empty) // 空白セーブ（Rounds = 0）を読み込んだ場合
                 IsContinue = false;
