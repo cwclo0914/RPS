@@ -56,7 +56,7 @@ namespace RPSRefactored
         private void NewFile()
         {
             Console.WriteLine("新しいセーブデータを作成します。\n");
-            InitialiseSave();
+            WriteFile(true);
             IsContinue = false;
         }
 
@@ -71,7 +71,7 @@ namespace RPSRefactored
                 {
                     Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
                     ContentsFileIO.BackUp();
-                    InitialiseSave();
+                    WriteFile(true);
                 }
             } while (Buffer.Length != Settings.PMAX + Settings.CMAX + 1);
         }
@@ -145,30 +145,12 @@ namespace RPSRefactored
             return num;
         }
 
-        // セーブデータ初期化
-        private void InitialiseSave()
-        {
-            string initialise = string.Empty;
-            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
-                initialise += ",";
-            ContentsFileIO.Write(initialise);
-        }
-
         //////////////////////// 終了処理 ////////////////////////
         private void End()
         {
             Rps.ReportCurrentScore();
-            WriteFile();
+            ContentsIO.WriteFile(false, Buffer);
             Console.WriteLine("終了します。お疲れ様でした。");
-        }
-
-        // 総ラウンド数(+1)を含めるStringの生成
-        private void WriteFile()
-        {
-            string s = string.Empty;
-            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
-                    s += Buffer[i] + ',';
-            ContentsFileIO.Write(s);
         }
     }
 }
