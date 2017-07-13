@@ -151,7 +151,6 @@ namespace RPSRefactored
             string initialise = string.Empty;
             for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
                 initialise += ",";
-
             ContentsFileIO.Write(initialise);
         }
 
@@ -160,7 +159,6 @@ namespace RPSRefactored
         {
             Rps.ReportCurrentScore();
             WriteFile();
-
             Console.WriteLine("終了します。お疲れ様でした。");
         }
 
@@ -168,15 +166,8 @@ namespace RPSRefactored
         private void WriteFile()
         {
             string s = string.Empty;
-
-            for (int i = 0; i < (Settings.PMAX + Settings.CMAX) + 1; i++)
-            {
-                if (i == 0)
-                    s = Buffer[i];
-                else
-                    s += ',' + Buffer[i];
-            }
-
+            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
+                    s += Buffer[i] + ',';
             ContentsFileIO.Write(s);
         }
     }
