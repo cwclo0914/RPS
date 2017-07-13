@@ -31,7 +31,6 @@ namespace RPSRefactored
         public int Pnum { get; set; }
         public int Cnum { get; set; }
         public int TotalCount { get; set; }
-        public bool IsRedo { get; set; }
 
         // Methods
         // インスタンス生成
