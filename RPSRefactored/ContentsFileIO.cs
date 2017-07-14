@@ -54,19 +54,5 @@ namespace RPSRefactored
             string dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             System.IO.File.Move(@"Data\rates.csv", @"Data\rates_" + dt + ".csv");
         }
-        
-        // RPSのString生成と書込
-        public static void WriteRPSSave(bool init, string[] sarray = null)
-        {
-            string s = string.Empty;
-            for (int i = 0; i < Settings.PMAX + Settings.CMAX; i++)
-            {
-                if (init)
-                    s += ',';
-                else
-                    s += sarray[i] + ',';
-            }
-            ContentsFileIO.Write(s);
-        }
     }
 }
