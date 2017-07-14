@@ -156,7 +156,7 @@ namespace RPSRefactored
         }
 
         // 現在の点数を報告する
-        public void ReportCurrentScore()
+        public string[] ReportCurrentScore()
         {
             string[] inter = new string[Settings.PMAX + Settings.CMAX + 1];
 
@@ -173,8 +173,8 @@ namespace RPSRefactored
                 else
                     inter[i] = TotalCount.ToString();
             }
-
             ConsoleIO.Result(inter);
+            return inter;
         }
     }
 }
