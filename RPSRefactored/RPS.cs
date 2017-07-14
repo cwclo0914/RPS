@@ -155,11 +155,10 @@ namespace RPSRefactored
                 c[i].Scoring(winningchoice, i);
         }
 
-        // 現在の点数を報告する
+        // 現在の点数を報告し、必要であれば返せる
         public string[] ReportCurrentScore()
         {
             string[] inter = new string[Settings.PMAX + Settings.CMAX + 1];
-
             for (int i = 0; i < inter.Length; i++)
             {
                 if (i < Pnum)
