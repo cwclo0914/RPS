@@ -148,12 +148,12 @@ namespace RPSRefactored
         //////////////////////// 終了処理 ////////////////////////
         private void End()
         {
-            Rps.ReportCurrentScore();
+            Array.Copy(Rps.ReportCurrentScore(), Buffer, Buffer.Length); // 最後に点数を報告し、情報をHostに戻す
             WriteFile(false);
             Console.WriteLine("終了します。お疲れ様でした。");
         }
-         
-        //////////////////// String生成と書込 ////////////////////
+        
+        // Stringの生成と書込
         private void WriteFile(bool init)
         {
             string s = string.Empty;
