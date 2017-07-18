@@ -162,7 +162,10 @@ namespace RPSRefactored
                 if (init)
                     s += ',';
                 else
+                {
                     s += Buffer[i] + ',';
+                    if (i == Settings.PMAX + Settings.CMAX - 1) s += Buffer[i + 1];
+                }
             }
             ContentsFileIO.Write(s);
         }

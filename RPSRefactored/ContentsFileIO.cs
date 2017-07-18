@@ -44,15 +44,24 @@ namespace RPSRefactored
             }
             catch
             {
-                Console.WriteLine("書込エラー");
+                Console.WriteLine("書込エラー：csvファイルを閉じてください");
+                Console.Read();
             }
         }
 
         // バックアップを取る
         public static void BackUp()
         {
-            string dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            System.IO.File.Move(@"Data\rates.csv", @"Data\rates_" + dt + ".csv");
+            try
+            {
+                string dt = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                System.IO.File.Move(@"Data\rates.csv", @"Data\rates_" + dt + ".csv");
+            }
+            catch
+            {
+                Console.WriteLine("書込エラー：csvファイルを閉じてください");
+                Console.Read();
+            }
         }
     }
 }
