@@ -12,10 +12,11 @@ namespace RPSRefactored
     internal class RPS : Game
     {
         // Fields
+        private static RPS _instance;
         Random random = new Random();
 
         // Constructors
-        public RPS(int pnum, int cnum)
+        protected RPS(int pnum, int cnum)
             : base(pnum, cnum)
         {
             ChoiceCount = new int[3] { 0, 0, 0 };
@@ -25,6 +26,14 @@ namespace RPSRefactored
         public int[] ChoiceCount { get; set; }
 
         // Methods
+        // Singleton
+        public static RPS Instance(int pnum, int cnum)
+        {
+            if (_instance == null)
+                _instance = new RPS(pnum, cnum);
+
+            return _instance;
+        }
         //////////////////////// 大メソッド ////////////////////////
         // じゃんけんメイン　→　ラウンド数を出力
         public void RPSMain()

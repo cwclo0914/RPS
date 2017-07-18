@@ -103,7 +103,7 @@ namespace RPSRefactored
                         cnum++;
                 }
             }
-            Rps = new RPS(pnum, cnum);
+            Rps = RPS.Instance(pnum, cnum);
             ConvertScore(pnum, cnum);
         }
 
@@ -126,7 +126,7 @@ namespace RPSRefactored
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
             cnum = NumberConfirmation("コンピューター", Settings.CMAX); // CPU
-            Rps = new RPS(pnum, cnum);
+            Rps = RPS.Instance(pnum, cnum);
         }
 
         // 初めからの人数確認
