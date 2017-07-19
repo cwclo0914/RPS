@@ -8,12 +8,12 @@ namespace RPSRefactored
 {
     abstract class AbstractFactory
     {
-        internal abstract GameData ChooseGame(string choice, int pnum, int cnum);
+        public abstract GameData ChooseGame(string choice, int pnum, int cnum);
     }
 
     internal class GameFactory : AbstractFactory
     {
-        internal override GameData ChooseGame(string choice, int pnum, int cnum)
+        public override GameData ChooseGame(string choice, int pnum, int cnum)
         {
             GameData game = null;
 
