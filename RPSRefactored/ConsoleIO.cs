@@ -9,7 +9,7 @@ namespace RPSRefactored
     /// <summary>
     /// ゲームの中で共通する便利なIO Methods
     /// </summary>
-    internal static class ConsoleIO
+    public static class ConsoleIO
     {
         // Methods
         // "Y/N"答えるまで出させないループ

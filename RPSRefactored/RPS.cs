@@ -44,7 +44,7 @@ namespace RPSRefactored
         }
         //////////////////////// 大メソッド ////////////////////////
         // じゃんけんメイン　→　ラウンド数を出力
-        public void RPSMain()
+        public override void RPSMain()
         {
             Console.WriteLine("　★　☆　★　じゃんけんへようこそ　★　☆　★　\n");
 
@@ -173,7 +173,7 @@ namespace RPSRefactored
         }
 
         // 現在の点数を報告し、必要であれば返せる
-        public string[] ReportCurrentScore()
+        public override string[] ReportCurrentScore()
         {
             string[] inter = new string[Settings.PMAX + Settings.CMAX + 1];
             for (int i = 0; i < inter.Length; i++)

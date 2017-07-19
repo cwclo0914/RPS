@@ -9,19 +9,23 @@ namespace RPSRefactored
     /// <summary>
     /// ユーザーとGameをつなげるホスト、前回結果を保持する
     /// </summary>
-    internal class RPSHost
+    internal class Host
     {
         // Fields
+        private string gameChoice;
+        private AbstractFactory gameFactory;
 
         // Constructors
-        public RPSHost()
+        public Host()
         {
             Buffer = new string[Settings.PMAX + Settings.CMAX + 1];
             IsContinue = true;
+            gameChoice = string.Empty;
+            gameFactory = new GameFactory();
         }
 
         // Properties
-        public RPS Rps { get; set; }
+        public GameData currentGame { get; set; }
         public string[] Buffer { get; set; }
         public bool IsContinue { get; set; }
 
@@ -29,16 +33,28 @@ namespace RPSRefactored
         ////////////////////// メインメソッド //////////////////////
         public void Main()
         {
+            this.WhatGame();
             this.StartUp();
-            Rps.RPSMain();
+            currentGame.RPSMain();
             this.End();
         }
 
+        // Methods
+        private void WhatGame()
+        {
+            while (gameChoice.ToLower() != "rps" && gameChoice.ToLower() != "test")
+            {
+                Console.Write("何を遊びたいですか？\n（RPSしかないです）＞");
+                gameChoice = Console.ReadLine();
+            }
+        }
+
         //////////////////////// 起動処理 ////////////////////////
+
         private void StartUp()
         {
             // 前回勝率の表示
-            if (ContentsFileIO.Read() == string.Empty)
+            if (ContentsFileIO.Read(gameChoice) == string.Empty)
                 NewFile();
             else
             {
@@ -64,12 +80,12 @@ namespace RPSRefactored
         {
             do
             {
-                Buffer = ContentsFileIO.Read().Split(',');
+                Buffer = ContentsFileIO.Read(gameChoice).Split(',');
 
                 if (Buffer.Length != Settings.PMAX + Settings.CMAX + 1) // 最大人数変更後のセーブデータ初期化
                 {
                     Console.WriteLine("セーブデータが使用できません。\n現在のセーブデータをバックアップし、初期化します。\n");
-                    ContentsFileIO.BackUp();
+                    ContentsFileIO.BackUp(gameChoice);
                     WriteFile(true);
                 }
             } while (Buffer.Length != Settings.PMAX + Settings.CMAX + 1);
@@ -84,7 +100,7 @@ namespace RPSRefactored
             {
                 Continue();
                 Console.WriteLine("前回結果：");
-                Rps.ReportCurrentScore();
+                currentGame.ReportCurrentScore();
             }
         }
 
@@ -102,21 +118,21 @@ namespace RPSRefactored
                         cnum++;
                 }
             }
-            Rps = RPS.Instance(pnum, cnum);
+
+            currentGame = gameFactory.ChooseGame(gameChoice, pnum, cnum);
             ConvertScore();
         }
 
         // 読み込んだ前回結果をEntityに反映する
         private void ConvertScore()
         {
-            foreach (Player player in Rps.p_list)
-                player.Score = int.Parse(Buffer[Rps.p_list.IndexOf(player)]);
-            foreach (Computer computer in Rps.c_list)
-                computer.Score = int.Parse(Buffer[Rps.c_list.IndexOf(computer) + Settings.PMAX]);
-            Rps.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
+            foreach (Player player in currentGame.p_list)
+                player.Score = int.Parse(Buffer[currentGame.p_list.IndexOf(player)]);
+            foreach (Computer computer in currentGame.c_list)
+                computer.Score = int.Parse(Buffer[currentGame.c_list.IndexOf(computer) + Settings.PMAX]);
+            currentGame.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
         }
 
-        
         // 初めからの場合
         private void NewGame()
         {
@@ -125,7 +141,8 @@ namespace RPSRefactored
             // 人数確認
             pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
             cnum = NumberConfirmation("コンピューター", Settings.CMAX); // CPU
-            Rps = RPS.Instance(pnum, cnum);
+
+            currentGame = gameFactory.ChooseGame(gameChoice, pnum, cnum);
         }
 
         // 初めからの人数確認
@@ -147,11 +164,11 @@ namespace RPSRefactored
         //////////////////////// 終了処理 ////////////////////////
         private void End()
         {
-            Array.Copy(Rps.ReportCurrentScore(), Buffer, Buffer.Length); // 最後に点数を報告し、情報をHostに戻す
+            Array.Copy(currentGame.ReportCurrentScore(), Buffer, Buffer.Length); // 最後に点数を報告し、情報をHostに戻す
             WriteFile(false);
             Console.WriteLine("終了します。お疲れ様でした。");
         }
-        
+
         // Stringの生成と書込
         private void WriteFile(bool init)
         {
@@ -166,7 +183,7 @@ namespace RPSRefactored
                     if (i == Settings.PMAX + Settings.CMAX - 1) s += Buffer[i + 1];
                 }
             }
-            ContentsFileIO.Write(s);
+            ContentsFileIO.Write(gameChoice, s);
         }
     }
 }

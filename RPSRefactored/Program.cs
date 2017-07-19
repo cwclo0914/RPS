@@ -11,7 +11,7 @@ namespace RPSRefactored
     {
         private static void Main(string[] args)
         {
-            RPSHost host = new RPSHost();
+            Host host = new Host();
             host.Main();
 
             Console.Read();

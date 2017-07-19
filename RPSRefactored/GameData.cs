@@ -9,7 +9,7 @@ namespace RPSRefactored
     /// <summary>
     /// ゲーム内の情報（ラウンド数とEntity Data）を保存する
     /// </summary>
-    internal class GameData
+    abstract internal class GameData
     {
         // Fields
 
@@ -44,5 +44,10 @@ namespace RPSRefactored
             for (int i = 0; i < Cnum; i++)
                 c_list.Add(new Computer());
         }
+
+        // Abstract Methods
+        public abstract void RPSMain();
+
+        public abstract string[] ReportCurrentScore();
     }
 }
