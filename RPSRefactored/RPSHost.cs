@@ -9,12 +9,12 @@ namespace RPSRefactored
     /// <summary>
     /// ユーザーとGameをつなげるホスト、前回結果を保持する
     /// </summary>
-    internal class Host
+    internal class RPSHost
     {
         // Fields
 
         // Constructors
-        public Host()
+        public RPSHost()
         {
             Buffer = new string[Settings.PMAX + Settings.CMAX + 1];
             IsContinue = true;
@@ -23,7 +23,6 @@ namespace RPSRefactored
         // Properties
         public RPS Rps { get; set; }
         public string[] Buffer { get; set; }
-        public int GameChoice { get; set; }
         public bool IsContinue { get; set; }
 
         // Methods
@@ -110,10 +109,10 @@ namespace RPSRefactored
         // 読み込んだ前回結果をEntityに反映する
         private void ConvertScore()
         {
-            for (int i = 0; i < Rps.p.Length; i++)
-                Rps.p[i].Score = int.Parse(Buffer[i]);
-            for (int i = 0; i < Rps.c.Length; i++)
-                Rps.c[i].Score = int.Parse(Buffer[i + Settings.PMAX]);
+            foreach (Player player in Rps.p_list)
+                player.Score = int.Parse(Buffer[Rps.p_list.IndexOf(player)]);
+            foreach (Computer computer in Rps.c_list)
+                computer.Score = int.Parse(Buffer[Rps.c_list.IndexOf(computer) + Settings.PMAX]);
             Rps.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
         }
 

@@ -9,14 +9,15 @@ namespace RPSRefactored
     /// <summary>
     /// じゃんけんゲームの本体
     /// </summary>
-    internal class RPS : Game
+    internal class RPS : GameData
     {
         // Fields
         private static RPS _instance;
         Random random = new Random();
+        private static object syncLock = new object();
 
         // Constructors
-        protected RPS(int pnum, int cnum)
+        private RPS(int pnum, int cnum)
             : base(pnum, cnum)
         {
             ChoiceCount = new int[3] { 0, 0, 0 };
@@ -30,8 +31,15 @@ namespace RPSRefactored
         public static RPS Instance(int pnum, int cnum)
         {
             if (_instance == null)
-                _instance = new RPS(pnum, cnum);
-
+            {
+                lock (syncLock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new RPS(pnum, cnum);
+                    }
+                }
+            }
             return _instance;
         }
         //////////////////////// 大メソッド ////////////////////////
@@ -47,8 +55,8 @@ namespace RPSRefactored
                     Reset();
                     PlayerInput();
                     ComputerShuffle();
-                    AnnouncementAndCount(p, Pnum);
-                    AnnouncementAndCount(c, Cnum);
+                    AnnouncementAndCount(p_list);
+                    AnnouncementAndCount(c_list);
                     Console.WriteLine();
                 } while (IsDraw());
                 Judge();
@@ -59,10 +67,10 @@ namespace RPSRefactored
         // リセット
         private void Reset()
         {
-            for (int i = 0; i < Pnum; i++)
-                p[i].Reset();
-            for (int i = 0; i < Cnum; i++)
-                c[i].Reset();
+            foreach (Player player in p_list)
+                player.Reset();
+            foreach (Computer computer in c_list)
+                computer.Reset();
             for (int i = 0; i < ChoiceCount.Length; i++)
                 ChoiceCount[i] = 0;
         }
@@ -70,11 +78,11 @@ namespace RPSRefactored
         // プレイヤー入力
         private void PlayerInput()
         {
-            for (int i = 0; i < Pnum; i++)
+            foreach (Player player in p_list)
             {
                 do
                 {
-                    Console.Write("プレイヤー{0}、入力してください。0:グー、1:チョキ、2:パー；9:現状報告＞", i + 1);
+                    Console.Write("プレイヤー{0}、入力してください。0:グー、1:チョキ、2:パー；9:現状報告＞", p_list.IndexOf(player) + 1);
                     int temp = -1;
                     try
                     {
@@ -85,9 +93,9 @@ namespace RPSRefactored
                     if (temp == 9)
                         ReportCurrentScore();
                     else
-                        p[i].Choice = temp;
+                        player.Choice = temp;
 
-                } while (!(p[i].Choice >= 0 && p[i].Choice <= 2)); // 正しく入力するまで続く
+                } while (!(player.Choice >= 0 && player.Choice <= 2)); // 正しく入力するまで続く
             }
             Console.WriteLine();
         }
@@ -95,30 +103,30 @@ namespace RPSRefactored
         // コンピューターシャッフル
         private void ComputerShuffle()
         {
-            for (int i = 0; i < Cnum; i++)
+            foreach (Computer computer in c_list)
             {
-                c[i].Shuffle(random);
+                computer.Shuffle(random);
                 System.Threading.Thread.Sleep(15);
             }
         }
 
         // ラウンドごとの報告とカウント（0:グー、1:チョキ、2:パー）
-        private void AnnouncementAndCount(Entity[] e, int num)
+        private void AnnouncementAndCount(List<Entity> list)
         {
-            for (int i = 0; i < num; i++)
+            foreach (Entity entity in list)
             {
-                switch (e[i].Choice)
+                switch (entity.Choice)
                 {
                     case 0:
-                        Console.WriteLine("{0}{1}がグーを出しました。", e[i].Name, i + 1);
+                        Console.WriteLine("{0}{1}がグーを出しました。", entity.Name, list.IndexOf(entity) + 1);
                         ChoiceCount[0]++;
                         break;
                     case 1:
-                        Console.WriteLine("{0}{1}がチョキを出しました。", e[i].Name, i + 1);
+                        Console.WriteLine("{0}{1}がチョキを出しました。", entity.Name, list.IndexOf(entity) + 1);
                         ChoiceCount[1]++;
                         break;
                     case 2:
-                        Console.WriteLine("{0}{1}がパーを出しました。", e[i].Name, i + 1);
+                        Console.WriteLine("{0}{1}がパーを出しました。", entity.Name, list.IndexOf(entity) + 1);
                         ChoiceCount[2]++;
                         break;
                 }
@@ -158,10 +166,10 @@ namespace RPSRefactored
         // 各Entityの勝敗を決める
         private void ScoringJudgement(int winningchoice)
         {
-            for (int i = 0; i < Pnum; i++)
-                p[i].Scoring(winningchoice, i);
-            for (int i = 0; i < Cnum; i++)
-                c[i].Scoring(winningchoice, i);
+            foreach (Player player in p_list)
+                player.Scoring(winningchoice, p_list.IndexOf(player));
+            foreach (Computer computer in c_list)
+                computer.Scoring(winningchoice, c_list.IndexOf(computer));
         }
 
         // 現在の点数を報告し、必要であれば返せる
@@ -171,11 +179,11 @@ namespace RPSRefactored
             for (int i = 0; i < inter.Length; i++)
             {
                 if (i < Pnum)
-                    inter[i] = p[i].Score.ToString();
+                    inter[i] = p_list[i].Score.ToString();
                 else if (i < Settings.PMAX)
                     inter[i] = string.Empty;
                 else if (i >= Settings.PMAX && i < Settings.PMAX + Cnum)
-                    inter[i] = c[i - Settings.PMAX].Score.ToString();
+                    inter[i] = c_list[i - Settings.PMAX].Score.ToString();
                 else if (i < Settings.PMAX + Settings.CMAX)
                     inter[i] = string.Empty;
                 else

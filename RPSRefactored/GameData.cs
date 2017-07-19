@@ -7,25 +7,28 @@ using System.Threading.Tasks;
 namespace RPSRefactored
 {
     /// <summary>
-    /// 様々なゲームが生成できるゲームプール（予定）
-    /// ゲームに応じてゲーム内の人数を作成するので、Entityの情報を保持する
+    /// ゲーム内の情報（ラウンド数とEntity Data）を保存する
     /// </summary>
-    internal class Game
+    internal class GameData
     {
         // Fields
 
         // Constructors
-        public Game(int pnum, int cnum)
+        public GameData(int pnum, int cnum)
         {
             Pnum = pnum;
             Cnum = cnum;
             TotalCount = 0;
+
+            p_list = new List<Entity>();
+            c_list = new List<Entity>();
+
             EntityCreate();
         }
 
         // Properties
-        public Entity[] p { get; set; }
-        public Entity[] c { get; set; }
+        public List<Entity> p_list { get; set; }
+        public List<Entity> c_list { get; set; }
 
         public int Pnum { get; set; }
         public int Cnum { get; set; }
@@ -35,14 +38,11 @@ namespace RPSRefactored
         // インスタンス生成
         public void EntityCreate()
         {
-            p = new Entity[Pnum];
-            c = new Entity[Cnum];
-
             for (int i = 0; i < Pnum; i++)
-                p[i] = new Player();
+                p_list.Add(new Player());
 
             for (int i = 0; i < Cnum; i++)
-                c[i] = new Computer();
+                c_list.Add(new Computer());
         }
     }
 }
