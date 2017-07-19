@@ -104,15 +104,15 @@ namespace RPSRefactored
                 }
             }
             Rps = RPS.Instance(pnum, cnum);
-            ConvertScore(pnum, cnum);
+            ConvertScore();
         }
 
         // 読み込んだ前回結果をEntityに反映する
-        private void ConvertScore(int pnum, int cnum)
+        private void ConvertScore()
         {
-            for (int i = 0; i < pnum; i++)
+            for (int i = 0; i < Rps.p.Length; i++)
                 Rps.p[i].Score = int.Parse(Buffer[i]);
-            for (int i = 0; i < cnum; i++)
+            for (int i = 0; i < Rps.c.Length; i++)
                 Rps.c[i].Score = int.Parse(Buffer[i + Settings.PMAX]);
             Rps.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
         }
