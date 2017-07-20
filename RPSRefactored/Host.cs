@@ -13,7 +13,7 @@ namespace RPSRefactored
     {
         // Fields
         private string gameChoice;
-        private AbstractFactory gameFactory;
+        private GameMaker gameMaker;
 
         // Constructors
         public Host()
@@ -21,7 +21,7 @@ namespace RPSRefactored
             Buffer = new string[Settings.PMAX + Settings.CMAX + 1];
             IsContinue = true;
             gameChoice = string.Empty;
-            gameFactory = new GameFactory();
+            gameMaker = new GameMaker();
         }
 
         // Properties
@@ -119,17 +119,17 @@ namespace RPSRefactored
                 }
             }
 
-            currentGame = gameFactory.ChooseGame(gameChoice, pnum, cnum);
+            currentGame = gameMaker.ChooseGame(gameChoice, pnum, cnum);
             ConvertScore();
         }
 
         // 読み込んだ前回結果をEntityに反映する
         private void ConvertScore()
         {
-            foreach (Player player in currentGame.p_list)
-                player.Score = int.Parse(Buffer[currentGame.p_list.IndexOf(player)]);
-            foreach (Computer computer in currentGame.c_list)
-                computer.Score = int.Parse(Buffer[currentGame.c_list.IndexOf(computer) + Settings.PMAX]);
+            foreach (Player player in currentGame.player_list)
+                player.Score = int.Parse(Buffer[currentGame.player_list.IndexOf(player)]);
+            foreach (Computer computer in currentGame.computer_list)
+                computer.Score = int.Parse(Buffer[currentGame.computer_list.IndexOf(computer) + Settings.PMAX]);
             currentGame.TotalCount = int.Parse(Buffer[Buffer.Length - 1]);
         }
 
@@ -142,7 +142,7 @@ namespace RPSRefactored
             pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
             cnum = NumberConfirmation("コンピューター", Settings.CMAX); // CPU
 
-            currentGame = gameFactory.ChooseGame(gameChoice, pnum, cnum);
+            currentGame = gameMaker.ChooseGame(gameChoice, pnum, cnum);
         }
 
         // 初めからの人数確認

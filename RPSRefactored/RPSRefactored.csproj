@@ -43,8 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractFactory.cs" />
-    <Compile Include="AbstractHost.cs" />
+    <Compile Include="GameMaker.cs" />
     <Compile Include="Computer.cs" />
     <Compile Include="ConsoleIO.cs" />
     <Compile Include="ContentsFileIO.cs" />

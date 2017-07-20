@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace RPSRefactored
 {
-    abstract class AbstractFactory
-    {
-        public abstract GameData ChooseGame(string choice, int pnum, int cnum);
-    }
 
-    internal class GameFactory : AbstractFactory
+    internal class GameMaker
     {
-        public override GameData ChooseGame(string choice, int pnum, int cnum)
+        public GameData ChooseGame(string choice, int pnum, int cnum)
         {
             GameData game = null;
 
