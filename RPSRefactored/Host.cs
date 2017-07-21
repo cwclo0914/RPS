@@ -35,7 +35,7 @@ namespace RPSRefactored
         {
             this.WhatGame();
             this.StartUp();
-            currentGame.RPSMain();
+            currentGame.Main();
             this.End();
         }
 
@@ -119,7 +119,7 @@ namespace RPSRefactored
                 }
             }
 
-            currentGame = gameMaker.ChooseGame(gameChoice, pnum, cnum);
+            currentGame = gameMaker.ChooseGame(false, gameChoice, pnum, cnum);
             ConvertScore();
         }
 
@@ -142,7 +142,7 @@ namespace RPSRefactored
             pnum = NumberConfirmation("プレイヤー", Settings.PMAX); // Player
             cnum = NumberConfirmation("コンピューター", Settings.CMAX); // CPU
 
-            currentGame = gameMaker.ChooseGame(gameChoice, pnum, cnum);
+            currentGame = gameMaker.ChooseGame(true, gameChoice, pnum, cnum);
         }
 
         // 初めからの人数確認

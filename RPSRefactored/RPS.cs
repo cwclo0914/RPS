@@ -42,11 +42,16 @@ namespace RPSRefactored
             }
             return _instance;
         }
+
+        public static void InstanceReset()
+        {
+            _instance = null;
+        }
         //////////////////////// 大メソッド ////////////////////////
         /// <summary>
         /// じゃんけんメイン　→　ラウンド数を出力
         /// </summary>
-        public override void RPSMain()
+        public override void Main()
         {
             Console.WriteLine("　★　☆　★　じゃんけんへようこそ　★　☆　★　\n");
 

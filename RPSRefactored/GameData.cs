@@ -46,7 +46,7 @@ namespace RPSRefactored
         }
 
         // Abstract Methods
-        public abstract void RPSMain();
+        public abstract void Main();
 
         public abstract string[] ReportCurrentScore();
     }

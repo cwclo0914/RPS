@@ -9,14 +9,19 @@ namespace RPSRefactored
 
     internal class GameMaker
     {
-        public GameData ChooseGame(string choice, int pnum, int cnum)
+        public GameData ChooseGame(bool newgame, string choice, int pnum, int cnum)
         {
             GameData game = null;
 
-            if (choice.ToLower() == "rps") { game = RPS.Instance(pnum, cnum); }
+            if (choice.ToLower() == "rps")
+            {
+                if (newgame) RPS.InstanceReset();
+                game = RPS.Instance(pnum, cnum);
+            }
             else if (choice.ToLower() == "test")
             {
                 Console.WriteLine("ステージ１：テスト成功");
+                if (newgame) test.InstanceReset();
                 game = test.Instance(pnum, cnum);
             }
 

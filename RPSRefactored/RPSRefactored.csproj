@@ -55,7 +55,6 @@
     <Compile Include="GameData.cs" />
     <Compile Include="RPS.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
