@@ -37,8 +37,13 @@ namespace RPSRefactored
             }
             return _instance;
         }
+
+        public static void InstanceReset()
+        {
+            _instance = null;
+        }
         //////////////////////// 大メソッド ////////////////////////
-        public override void RPSMain()
+        public override void Main()
         {
             Console.WriteLine("テストなう");
             Console.ReadLine();
